@@ -57,6 +57,20 @@ public class Project3Tests {
    @Test
    public void testIntNegativePower(){
       LongInteger a = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(5));
-      LongInteger b = LongInteger.
+      LongInteger b = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+      b.negate();
+      LongInteger result = a.pow(b);
+      b.negate();
+      LongInteger expectedResult = a.inverse().pow(b);
+      assertEquals(expectedResult, result);
+   }
+   @Test
+   public void testIntRandomPower(){
+      int pow = 5;
+      String valA = CSC338Utils.generateNDigitNumber(6);
+      BigInteger bigIntA = new BigInteger(valA);
+      LongInteger a = LongInteger.valueOf(valA);
+      BigInteger expectedResult = bigIntA.pow(pow);
+      LongInteger result = a.pow(LongInteger.valueOf(pow));
    }
 }
