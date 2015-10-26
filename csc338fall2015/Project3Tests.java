@@ -72,5 +72,13 @@ public class Project3Tests {
       LongInteger a = LongInteger.valueOf(valA);
       BigInteger expectedResult = bigIntA.pow(pow);
       LongInteger result = a.pow(LongInteger.valueOf(pow));
+      assertEquals(expectedResult.toString(), result.toString());
+   }
+   @Test
+   public void testIntEvaluateModEqauslNumber(){
+      LongInteger a = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+      LongInteger[] moduli = new LongInteger[1];
+      moduli[0]= a;
+      LongInteger[] expectedResult = a.evaluate(moduli);
    }
 }
