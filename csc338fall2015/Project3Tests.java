@@ -120,4 +120,55 @@ public class Project3Tests {
       LongInteger result = a.karatsuba(LongInteger.ZERO);
       assertEquals(expectedResult, result);
    }
+   @Test
+   public void testKaratsubaMultiplyOne(){
+      LongInteger a = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(4));
+      LongInteger expectedResult = new LongInteger(a);
+      LongInteger result = a.karatsuba(LongInteger.ONE);
+      assertEquals(expectedResult, result);
+   }
+   @Test
+   public void testKaratsbuaCommutative(){
+      LongInteger a = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(4));
+      LongInteger b = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(4));
+
+      LongInteger expectedResult = a.karatsuba(b);
+      LongInteger result = b.karatsuba(a);
+      assertEquals(result, expectedResult);
+   }
+   @Test
+   public void testKaratsubaPositiveMultiplyPositive(){
+      String valA = CSC338Utils.generateNDigitNumber(5);
+      String valB = CSC338Utils.generateNDigitNumber(5);
+      LongInteger a = LongInteger.valueOf(valA);
+      LongInteger b = LongInteger.valueOf(valB);
+
+      LongInteger result = a.karatsuba(b);
+      LongInteger expectedResult = a.multiply(b);
+
+      assertEquals(result, expectedResult);
+   }
+   @Test
+   public void testKaratsubaNegativeMultiplyNegative(){  
+      String valA = CSC338Utils.generateNDigitNumber(5);
+      String valB = CSC338Utils.generateNDigitNumber(5);
+      LongInteger a = LongInteger.valueOf(valA);
+      LongInteger b = LongInteger.valueOf(valB);
+      a.negate();
+      b.negate();
+      LongInteger result = a.karatsuba(b);
+      LongInteger expectedResult = a.multiply(b);
+      assertEquals(result, expectedResult);   
+   }
+   @Test
+   public void testKaratsubaNegativeMultiplyPositive(){ 
+      String valA = CSC338Utils.generateNDigitNumber(5);
+      String valB = CSC338Utils.generateNDigitNumber(5);
+      LongInteger a = LongInteger.valueOf(valA);
+      LongInteger b = LongInteger.valueOf(valB);
+      a.negate();
+      LongInteger result = a.karatsuba(b);
+      LongInteger expectedResult = a.multiply(b);
+   }
+
 }
