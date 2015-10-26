@@ -79,6 +79,45 @@ public class Project3Tests {
       LongInteger a = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
       LongInteger[] moduli = new LongInteger[1];
       moduli[0]= a;
-      LongInteger[] expectedResult = a.evaluate(moduli);
+      LongInteger expectedResult = new LongInteger(a.evaluate(moduli)[0]);
+      a.changeModulus(a);
+      a = a.add(LongInteger.ZERO);
+      assertEquals(a, expectedResult);
+   }
+   @Test
+   public void testIntEvaluate(){
+      LongInteger[] moduli = new LongInteger[5];
+      String[] vals = new String[5];
+      vals[0] = CSC338Utils.generateNDigitNumber(2);
+      vals[1] = CSC338Utils.generateNDigitNumber(2);
+      vals[2] = CSC338Utils.generateNDigitNumber(2);
+      vals[3] = CSC338Utils.generateNDigitNumber(2);
+      vals[4] = CSC338Utils.generateNDigitNumber(2);
+
+      moduli[0] = LongInteger.valueOf(vals[0]);
+      moduli[1] = LongInteger.valueOf(vals[1]);
+      moduli[2] = LongInteger.valueOf(vals[2]);
+      moduli[3] = LongInteger.valueOf(vals[3]);
+      moduli[4] = LongInteger.valueOf(vals[4]);
+      String stringValue = CSC338Utils.generateNDigitNumber(5);
+      LongInteger value = LongInteger.valueOf(stringValue);
+      LongInteger[] result = value.evaluate(moduli); 
+      boolean allTrue = true;
+      for(int i =0 ; i< result.length; i++){
+         BigInteger temp = new BigInteger(stringValue);
+         if(!(temp.mod(new BigInteger(vals[i])).toString().equals(moduli[i].toString()))){
+            allTrue = false;
+            break;
+         }
+      }
+      assertEquals(true, allTrue);
+   }
+   @Test
+   public void testKaratsubaMultiplyZero(){
+      LongInteger a = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(4));
+
+      LongInteger expectedResult = LongInteger.ZERO;
+      LongInteger result = a.karatsuba(LongInteger.ZERO);
+      assertEquals(expectedResult, result);
    }
 }
