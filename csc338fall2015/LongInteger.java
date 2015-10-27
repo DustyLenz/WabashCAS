@@ -1176,7 +1176,7 @@ public class LongInteger {
     for (int i = 0; i < v.length; ++i) {
       LongInteger smallGuy = bigguy.divide(m[i]);
       LongInteger[] temp = m[i].traditionalEEA(smallGuy);
-      result = result.addSameSign(v[i].multiply(smallGuy).multiply(temp[2])).remainder(m[i]);
+      result = result.addSameSign(v[i].multiply(smallGuy).multiply(temp[2])).remainder(bigguy);
     }
     return result;
  }
