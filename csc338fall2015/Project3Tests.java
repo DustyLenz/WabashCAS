@@ -331,28 +331,28 @@ public class Project3Tests {
    /*@Test
    //Handworked example... nothing online can calculates only the Lagrange interpolant
    public void testLagrangeWorks(){
-      LongInteger.changeModulus(LongInteger.valueOf(5));
-      LongInteger[] point = new LongInteger[3];
-      point[0] = LongInteger.valueOf(2);
-      point[1] = LongInteger.valueOf(4);
-      point[2] = LongInteger.valueOf(5);
-      
-      LongIntegerPolynomial[] result = LongIntegerPolynomial.lagrangeInterpolants(point);
-      LongIntegerPolynomial[] expectedResult = new LongIntegerPolynomial[3];
-      LongInteger[] temp = {LongInteger.valueOf(20), LongInteger.valueOf(-9), LongInteger.valueOf(1)};
-      expectedResult[0] = new LongIntegerPolynomial(temp);
-      LongInteger[] temp1 = {LongInteger.valueOf(20), LongInteger.valueOf(-14), LongInteger.valueOf(2)};
-      expectedResult[1] = new LongIntegerPolynomial(temp1);
-      LongInteger[] temp2 = {LongInteger.valueOf(16), LongInteger.valueOf(-12), LongInteger.valueOf(2)};
-      expectedResult[2] = new LongIntegerPolynomial(temp2);
-      boolean allTrue = true;
-      for(int i = 0; i < result.length; i++){
-         if(!result[0].equals(expectedResult[i])){
-            allTrue = false;
-            break;
-         }
-      }
-      assertEquals(allTrue, true);
+   LongInteger.changeModulus(LongInteger.valueOf(5));
+   LongInteger[] point = new LongInteger[3];
+   point[0] = LongInteger.valueOf(2);
+   point[1] = LongInteger.valueOf(4);
+   point[2] = LongInteger.valueOf(5);
+
+   LongIntegerPolynomial[] result = LongIntegerPolynomial.lagrangeInterpolants(point);
+   LongIntegerPolynomial[] expectedResult = new LongIntegerPolynomial[3];
+   LongInteger[] temp = {LongInteger.valueOf(20), LongInteger.valueOf(-9), LongInteger.valueOf(1)};
+   expectedResult[0] = new LongIntegerPolynomial(temp);
+   LongInteger[] temp1 = {LongInteger.valueOf(20), LongInteger.valueOf(-14), LongInteger.valueOf(2)};
+   expectedResult[1] = new LongIntegerPolynomial(temp1);
+   LongInteger[] temp2 = {LongInteger.valueOf(16), LongInteger.valueOf(-12), LongInteger.valueOf(2)};
+   expectedResult[2] = new LongIntegerPolynomial(temp2);
+   boolean allTrue = true;
+   for(int i = 0; i < result.length; i++){
+   if(!result[0].equals(expectedResult[i])){
+   allTrue = false;
+   break;
+   }
+   }
+   assertEquals(allTrue, true);
    }*/
    @Test
    //interpolate calls lagrange interpolant, we can test both at the same time
@@ -361,10 +361,154 @@ public class Project3Tests {
       LongInteger[] uPoints = {LongInteger.valueOf(-1), LongInteger.valueOf(0), LongInteger.valueOf(1), LongInteger.valueOf(2), LongInteger.valueOf(6)};
       LongInteger[] vPoints = {LongInteger.valueOf(2), LongInteger.valueOf(5), LongInteger.valueOf(6), LongInteger.valueOf(15), LongInteger.valueOf(4)};
       LongIntegerPolynomial result = LongIntegerPolynomial.interpolate(uPoints, vPoints);
-      
+
       LongInteger[] answerList = {LongInteger.valueOf(5), LongInteger.valueOf(2), LongInteger.valueOf(2), LongInteger.valueOf(14)};
       LongIntegerPolynomial expectedResult = new LongIntegerPolynomial(answerList);
       assertEquals(result, expectedResult);
    }
+   @Test
+   public void testPolynomialCRAWorks(){
+      LongInteger.changeModulus(LongInteger.valueOf(5));
+
+      LongIntegerPolynomial[] v = new LongIntegerPolynomial[5];
+      v[0] = LongIntegerPolynomial.ONE;
+      LongInteger[] temp1 = {LongInteger.valueOf(0), LongInteger.valueOf(1)};
+      v[1] = new LongIntegerPolynomial(temp1);
+      LongInteger[] temp2 = {LongInteger.valueOf(2), LongInteger.valueOf(0), LongInteger.valueOf(-3), LongInteger.valueOf(3)};
+      v[2] = new LongIntegerPolynomial(temp2);
+      LongInteger[] temp3 = {LongInteger.valueOf(1), LongInteger.valueOf(0), LongInteger.valueOf(0), LongInteger.valueOf(0), LongInteger.valueOf(1)};
+      v[3] = new LongIntegerPolynomial(temp3);  
+      LongInteger[] temp4 = {LongInteger.valueOf(0), LongInteger.valueOf(2), LongInteger.valueOf(0), LongInteger.valueOf(3) };
+      v[4] = new LongIntegerPolynomial(temp4); 
+   	LongIntegerPolynomial[] m = new LongIntegerPolynomial[5];
+      LongInteger[] vTemp0 = {LongInteger.valueOf(1), LongInteger.valueOf(1)};
+      m[0] = new LongIntegerPolynomial(vTemp0);
+      LongInteger[] vTemp1 = {LongInteger.valueOf(1),LongInteger.valueOf(0),LongInteger.valueOf(1)};
+      m[1] = new LongIntegerPolynomial(vTemp1);
+      LongInteger[] vTemp2 = {LongInteger.valueOf(1),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(1)};
+      m[2] = new LongIntegerPolynomial(vTemp2);
+      LongInteger[] vTemp3 = {LongInteger.valueOf(1),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(1)};
+      m[3] = new LongIntegerPolynomial(vTemp3);
+      LongInteger[] vTemp4 = {LongInteger.valueOf(1),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(1)};
+      m[4] = new LongIntegerPolynomial(vTemp4);
+
+      LongIntegerPolynomial result = LongIntegerPolynomial.cra(v, m);
+      boolean allTrue =true;
+      for(int i = 0; i < m.length; i++){
+         LongIntegerPolynomial tempPoly = result.remainder(m[i]);
+         if(!v[i].equals(tempPoly)){
+            allTrue = false;
+            break;
+         }
+      }
+      assertEquals(allTrue, true);
+   }
+   @Test
+    public void testPolynomialKaratsubaMultiplyByZero(){
+        System.out.println("Test: Karatsuba Multiply by Zero");
+        ArrayList<LongInteger> polyList = new ArrayList<LongInteger>();
+		for(int i = 0; i < 15; i++){
+			if(i == 3 || i == 5){
+			polyList.add(LongInteger.ZERO);
+			}
+			else{
+				polyList.add(LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2)));
+			}
+		}
+		LongIntegerPolynomial polyA = new LongIntegerPolynomial(polyList);
+        
+        LongIntegerPolynomial result = polyA.karatsuba(LongIntegerPolynomial.ZERO);
+        LongIntegerPolynomial expectedResult = LongIntegerPolynomial.ZERO;
+        boolean expectBool = expectedResult.equals(result);
+        
+        assertEquals(true, expectBool);
+    }
+	@Test
+    public void testPolynomialKaratsubaMultiplyByOne(){
+        System.out.println("Test: Multiply by One");
+        ArrayList<LongInteger> polyList = new ArrayList<LongInteger>();
+		for(int i = 0; i < 15; i++){
+			if(i == 3 || i == 5){
+			polyList.add(LongInteger.ZERO);
+			}
+			else{
+				polyList.add(LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2)));
+			}
+		}
+		LongIntegerPolynomial polyA = new LongIntegerPolynomial(polyList);
+        LongIntegerPolynomial expectedResult = polyA;
+        
+        LongIntegerPolynomial result = polyA.karatsuba(LongIntegerPolynomial.ONE);
+        
+        boolean expectBool = expectedResult.equals(result);
+        
+        assertEquals(true, expectBool);
+    }
+    @Test
+    public void testPolynomialKaratsubaMultiply(){
+        System.out.println("Test: Multiply");
+        ArrayList<LongInteger> polyList = new ArrayList<LongInteger>();
+		for(int i = 0; i < 15; i++){
+			if(i == 3 || i == 5){
+			polyList.add(LongInteger.ZERO);
+			}
+			else{
+				polyList.add(LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2)));
+			}
+		}
+		LongIntegerPolynomial polyA = new LongIntegerPolynomial(polyList);
+		
+		ArrayList<LongInteger> polyList1 = new ArrayList<LongInteger>();
+		for(int i = 0; i < 15; i++){
+			if(i == 3 || i == 5){
+			polyList1.add(LongInteger.ZERO);
+			}
+			else{
+				polyList1.add(LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2)));
+			}
+		}
+		LongIntegerPolynomial polyB = new LongIntegerPolynomial(polyList1);
+        
+        LongIntegerPolynomial expectedResult = polyA.multiply(polyB);
+        
+        LongIntegerPolynomial result = polyA.karatsuba(polyB);
+        boolean expectBool = expectedResult.equals(result);
+        
+        assertEquals(true, expectBool);
+    }
+    @Test
+    public void testKaratsubaMultiplyCommutativeMultiply(){
+        System.out.println("Test: Commutative Multiply");
+       ArrayList<LongInteger> polyList = new ArrayList<LongInteger>();
+		for(int i = 0; i < 15; i++){
+			if(i == 3 || i == 5){
+			polyList.add(LongInteger.ZERO);
+			}
+			else{
+				polyList.add(LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2)));
+			}
+		}
+		LongIntegerPolynomial polyA = new LongIntegerPolynomial(polyList);
+		
+		ArrayList<LongInteger> polyList1 = new ArrayList<LongInteger>();
+		for(int i = 0; i < 15; i++){
+			if(i == 3 || i == 5){
+			polyList1.add(LongInteger.ZERO);
+			}
+			else{
+				polyList1.add(LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2)));
+			}
+		}
+		LongIntegerPolynomial polyB = new LongIntegerPolynomial(polyList1);
+        
+        LongIntegerPolynomial expectedResult = polyA.karatsuba(polyB);
+        
+        LongIntegerPolynomial result = polyB.karatsuba(polyA);
+        boolean expectBool = expectedResult.equals(result);
+        
+        assertEquals(true, expectBool);
+    }
 }
+
+
 
