@@ -123,10 +123,10 @@ public class Project3Tests {
       vals[4] = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
 
       moduli[0] = LongInteger.valueOf(313);
-	   moduli[1] = LongInteger.valueOf(373);
-	   moduli[2] = LongInteger.valueOf(571);
-	   moduli[3] = LongInteger.valueOf(661);
-	   moduli[4] = LongInteger.valueOf(773);
+      moduli[1] = LongInteger.valueOf(373);
+      moduli[2] = LongInteger.valueOf(571);
+      moduli[3] = LongInteger.valueOf(661);
+      moduli[4] = LongInteger.valueOf(773);
 
       LongInteger result = LongInteger.cra(vals, moduli);
       boolean allTrue = true;
@@ -213,4 +213,63 @@ public class Project3Tests {
       LongIntegerPolynomial result = polyA.pow(LongInteger.ZERO);
       assertEquals(result, LongIntegerPolynomial.ONE);
    }
+   @Test
+   public void testPolynomialFirstPower(){
+      ArrayList<LongInteger> polyList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 6; i++){
+         if(i == 3){
+            polyList.add(LongInteger.ZERO);
+         }
+         else{
+
+            polyList.add(LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2)));
+         }
+      }
+      LongIntegerPolynomial polyA = new LongIntegerPolynomial(polyList);
+      LongIntegerPolynomial result = polyA.pow(LongInteger.ONE);
+      assertEquals(polyA, result);
+   }
+   @Test
+   public void testPolynomialPowWorks(){
+      //Answer from mathematica
+      int[] answerIntList ={1, 20, 160, 655, 1520, 2464, 3930, 4920, 4320, 6030, 2160, 4320, 405, 1620, 0, 243};
+      ArrayList<LongInteger> answerList = new ArrayList<LongInteger>();
+
+      for(int i = 0; i < answerIntList.length; i++){
+         answerList.add(LongInteger.valueOf(answerIntList[i]));
+      }
+      LongIntegerPolynomial expectedResult = new LongIntegerPolynomial(answerList);
+      int[] inputArray = {3, 0, 4, 1};
+      ArrayList<LongInteger> polyList = new ArrayList<LongInteger>();
+      for(int i = 0; i < inputArray.length; i++){
+         polyList.add(LongInteger.valueOf(inputArray[i]));
+      }
+      LongIntegerPolynomial polyA = new LongIntegerPolynomial(polyList);
+
+      LongIntegerPolynomial result = polyA.pow(LongInteger.valueOf(5));
+
+      assertEquals(expectedResult, result);
+
+   }
+   @Test
+   public void testPolynomialApplyZero(){ 
+      ArrayList<LongInteger> polyList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 6; i++){
+         if(i == 3){
+            polyList.add(LongInteger.ZERO);
+         }
+         else{
+
+            polyList.add(LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2)));
+         }
+      }
+      LongIntegerPolynomial polyA = new LongIntegerPolynomial(polyList);
+
+      LongInteger result = polyA.apply(LongInteger.ZERO);
+
+      LongInteger expectedResult = LongInteger.ZERO;
+
+      assertEquals(expectedResult, result);
+   }
+   
 }
