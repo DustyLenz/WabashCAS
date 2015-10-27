@@ -113,6 +113,34 @@ public class Project3Tests {
       assertEquals(true, allTrue);
    }
    @Test
+   public void testCRA(){ 
+      LongInteger[] moduli = new LongInteger[5];
+      LongInteger[] vals = new LongInteger[5];
+      vals[0] = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+      vals[1] = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+      vals[2] = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+      vals[3] = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+      vals[4] = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+
+      moduli[0] = LongInteger.valueOf(313);
+	   moduli[1] = LongInteger.valueOf(373);
+	   moduli[2] = LongInteger.valueOf(571);
+	   moduli[3] = LongInteger.valueOf(661);
+	   moduli[4] = LongInteger.valueOf(773);
+
+      LongInteger result = LongInteger.cra(vals, moduli);
+      boolean allTrue = true;
+      for(int i = 0; i < vals.length; i++){
+         BigInteger tempBig = new BigInteger(result.toString());
+         allTrue =(vals[i].toString()).equals(tempBig.mod(new BigInteger(moduli[i].toString())));
+         if(!allTrue){
+            break;
+         }
+      }
+      assertEquals(allTrue, true);
+
+   }
+   @Test
    public void testKaratsubaMultiplyZero(){
       LongInteger a = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(4));
 
@@ -170,5 +198,19 @@ public class Project3Tests {
       LongInteger result = a.karatsuba(b);
       LongInteger expectedResult = a.multiply(b);
    }
-
+   @Test
+   public void testPolynomialZerothPower(){
+      ArrayList<LongInteger> polyList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 15; i++){
+         if(i == 3 || i == 5){
+            polyList.add(LongInteger.ZERO);
+         }
+         else{
+            polyList.add(LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2)));
+         }
+      }
+      LongIntegerPolynomial polyA = new LongIntegerPolynomial(polyList);
+      LongIntegerPolynomial result = polyA.pow(LongInteger.ZERO);
+      assertEquals(result, LongIntegerPolynomial.ONE);
+   }
 }
