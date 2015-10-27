@@ -56,6 +56,7 @@ public class Project3Tests {
    }
    @Test
    public void testIntNegativePower(){
+      LongInteger.changeModulus(LongInteger.valueOf(101));
       LongInteger a = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(5));
       LongInteger b = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
       b.negate();
@@ -63,6 +64,7 @@ public class Project3Tests {
       b.negate();
       LongInteger expectedResult = a.inverse().pow(b);
       assertEquals(expectedResult, result);
+      LongInteger.changeModulus(LongInteger.ZERO);
    }
    @Test
    public void testIntRandomPower(){
