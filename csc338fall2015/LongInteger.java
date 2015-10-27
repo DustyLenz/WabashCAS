@@ -1170,7 +1170,15 @@ public class LongInteger {
   * @return 
   */ 
  public static LongInteger cra( LongInteger[] v, LongInteger[] m ) {
-  throw new UnsupportedOperationException("CRA not supported yet.");
+    LongInteger result = LongInteger.ZERO;
+    LongInteger bigguy = LongInteger.ONE;
+    for (int i = 0; i < m.length; ++i) bigguy = bigguy.multiply(m[i]);
+    for (int i = 0; i < v.length; ++i) {
+      LongInteger smallGuy = bigguy.divide(m[i]);
+      LongInteger[] temp = m[i].traditionalEEA(smallGuy);
+      result = result.addSameSign(v[i].multiply(smallGuy).multiply(temp[2])).remainder(m[i]);
+    }
+    return result;
  }
 
  /** Multiply by LongInteger x via Karatsuba algorithm
