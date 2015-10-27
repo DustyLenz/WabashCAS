@@ -451,7 +451,11 @@ public class LongIntegerPolynomial {
             returnArray[0] = q;
             returnArray[1] = r;
         } 
+		//Albert's code
         else {
+			if(poly.equals(LongIntegerPolynomial.ZERO)){
+				throw new java.lang.ArithmeticException("Divide by zero");
+			}
             ArrayList<LongInteger> quotient = new ArrayList<LongInteger>();
             
             if (this.degree() < poly.degree()) {

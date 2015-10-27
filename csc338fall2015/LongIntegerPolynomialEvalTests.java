@@ -20,8 +20,8 @@ import static org.junit.Assert.*;
  *
  * @author DustyLenz
  */
-public class LongIntegerPolynomialEval {
-   public LongIntegerPolynomialEval(){
+public class LongIntegerPolynomialEvalTests {
+   public LongIntegerPolynomialEvalTests(){
 
    }
    @BeforeClass
