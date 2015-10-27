@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import java.math.*;
-import java.util.ArrayList;
+import java.util.*;
 import static org.junit.Assert.*;
 
 /**
@@ -271,5 +271,100 @@ public class Project3Tests {
 
       assertEquals(expectedResult, result);
    }
-   
+   @Test
+   public void testPolynomialApplyWorks(){
+      int[] inputIntList = {5, 0, 4, 0, 3, 0, 0, 15, 27, 0, 3, 1};
+      ArrayList<LongInteger> inputList = new ArrayList<LongInteger>();
+      for(int i: inputIntList){
+         inputList.add(LongInteger.valueOf(inputIntList[i]));
+      }
+      LongIntegerPolynomial polyA = new LongIntegerPolynomial(inputList);
+
+      LongInteger result = polyA.apply(LongInteger.valueOf(5));
+
+      LongInteger expectedResult = LongInteger.valueOf("252200266");
+
+      assertEquals(result, expectedResult);
+   }
+   //Only one test for evaluate, it's literally just apply on multiple values
+   @Test 
+   public void testPolynomialEvaluate(){
+      int[] inputIntList = {5, 0, 4, 0, 3, 0, 0, 15, 27, 0, 3, 1};
+      ArrayList<LongInteger> inputList = new ArrayList<LongInteger>();
+      for(int i: inputIntList){
+         inputList.add(LongInteger.valueOf(inputIntList[i]));
+      }
+      LongIntegerPolynomial polyA = new LongIntegerPolynomial(inputList);
+      LongInteger[] valueList = new LongInteger[3];
+      valueList[0] = LongInteger.valueOf(5);
+      valueList[1] = LongInteger.valueOf(7);
+      valueList[2] = LongInteger.valueOf(11);
+
+      LongInteger[] result = polyA.evaluate(valueList);
+      LongInteger[] expectedResult = new LongInteger[3];
+      expectedResult[0] = LongInteger.valueOf("252200266");
+      expectedResult[1] = LongInteger.valueOf("10050564070");
+      expectedResult[2] = LongInteger.valueOf("1436048860918");
+      boolean allTrue = true;
+      for(int i = 0; i < result.length; i++){
+         if(!result[i].equals(expectedResult[i])){
+            allTrue = false;
+         }
+      }
+      assertEquals(allTrue, true);
+
+   }
+   @Test
+   public void testlagrangeAllZero(){
+      LongInteger[] input = new LongInteger[10];
+      Arrays.fill(input, LongInteger.ZERO);
+      LongIntegerPolynomial[] result = LongIntegerPolynomial.lagrangeInterpolants(input);
+      boolean allTrue = true;
+      for(int i = 0; i < result.length; i++){
+         if(!result[0].equals(LongIntegerPolynomial.ZERO)){
+            allTrue = false;
+            break;
+         }
+      }
+      assertEquals(allTrue, true);
+   }
+   /*@Test
+   //Handworked example... nothing online can calculates only the Lagrange interpolant
+   public void testLagrangeWorks(){
+      LongInteger.changeModulus(LongInteger.valueOf(5));
+      LongInteger[] point = new LongInteger[3];
+      point[0] = LongInteger.valueOf(2);
+      point[1] = LongInteger.valueOf(4);
+      point[2] = LongInteger.valueOf(5);
+      
+      LongIntegerPolynomial[] result = LongIntegerPolynomial.lagrangeInterpolants(point);
+      LongIntegerPolynomial[] expectedResult = new LongIntegerPolynomial[3];
+      LongInteger[] temp = {LongInteger.valueOf(20), LongInteger.valueOf(-9), LongInteger.valueOf(1)};
+      expectedResult[0] = new LongIntegerPolynomial(temp);
+      LongInteger[] temp1 = {LongInteger.valueOf(20), LongInteger.valueOf(-14), LongInteger.valueOf(2)};
+      expectedResult[1] = new LongIntegerPolynomial(temp1);
+      LongInteger[] temp2 = {LongInteger.valueOf(16), LongInteger.valueOf(-12), LongInteger.valueOf(2)};
+      expectedResult[2] = new LongIntegerPolynomial(temp2);
+      boolean allTrue = true;
+      for(int i = 0; i < result.length; i++){
+         if(!result[0].equals(expectedResult[i])){
+            allTrue = false;
+            break;
+         }
+      }
+      assertEquals(allTrue, true);
+   }*/
+   @Test
+   //interpolate calls lagrange interpolant, we can test both at the same time
+   public void testInterpolantWorks(){
+      LongInteger.changeModulus(LongInteger.valueOf(17));
+      LongInteger[] uPoints = {LongInteger.valueOf(-1), LongInteger.valueOf(0), LongInteger.valueOf(1), LongInteger.valueOf(2), LongInteger.valueOf(6)};
+      LongInteger[] vPoints = {LongInteger.valueOf(2), LongInteger.valueOf(5), LongInteger.valueOf(6), LongInteger.valueOf(15), LongInteger.valueOf(4)};
+      LongIntegerPolynomial result = LongIntegerPolynomial.interpolate(uPoints, vPoints);
+      
+      LongInteger[] answerList = {LongInteger.valueOf(5), LongInteger.valueOf(2), LongInteger.valueOf(2), LongInteger.valueOf(14)};
+      LongIntegerPolynomial expectedResult = new LongIntegerPolynomial(answerList);
+      assertEquals(result, expectedResult);
+   }
 }
+
