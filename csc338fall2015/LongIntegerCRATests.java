@@ -49,6 +49,13 @@ public class LongIntegerCRATests {
       vals[2] = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
       vals[3] = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
       vals[4] = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+	  
+	  /*vals[0] = LongInteger.valueOf(10);
+      vals[1] = LongInteger.valueOf(10);
+      vals[2] = LongInteger.valueOf(10);
+      vals[3] = LongInteger.valueOf(10);
+      vals[4] = LongInteger.valueOf(10);*/
+	  
 
       moduli[0] = LongInteger.valueOf(313);
       moduli[1] = LongInteger.valueOf(373);
@@ -59,9 +66,10 @@ public class LongIntegerCRATests {
       LongInteger result = LongInteger.cra(vals, moduli);
       boolean allTrue = true;
       for(int i = 0; i < vals.length; i++){
-         BigInteger tempBig = new BigInteger(result.toString());
-         allTrue =(vals[i].toString()).equals(tempBig.mod(new BigInteger(moduli[i].toString())));
+         LongInteger tempChecker = result.remainder(moduli[i]);
+         allTrue = tempChecker.equals(vals[i]);
          if(!allTrue){
+			System.out.println("i: "+ i + " tempCheck : " + tempChecker +  " vals[i]: " + vals[i]);
             break;
          }
       }

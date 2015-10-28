@@ -44,12 +44,13 @@ public class LongIntegerPolynomialEvalTests {
    @Test 
    public void testPolynomialEvaluate(){
       System.out.println("Test: polynomial evaluate function works");
-      int[] inputIntList = {5, 0, 4, 0, 3, 0, 0, 15, 27, 0, 3, 1};
+      int[] inputIntList = {1, 3, 0, 27, 15, 0, 0, 3, 0, 4, 0, 5};
       ArrayList<LongInteger> inputList = new ArrayList<LongInteger>();
-      for(int i: inputIntList){
+      for(int i = 0; i < inputIntList.length; i++){
          inputList.add(LongInteger.valueOf(inputIntList[i]));
       }
       LongIntegerPolynomial polyA = new LongIntegerPolynomial(inputList);
+	  System.out.println("PolyA degree: " + polyA.degree());
       LongInteger[] valueList = new LongInteger[3];
       valueList[0] = LongInteger.valueOf(5);
       valueList[1] = LongInteger.valueOf(7);
@@ -63,7 +64,9 @@ public class LongIntegerPolynomialEvalTests {
       boolean allTrue = true;
       for(int i = 0; i < result.length; i++){
          if(!result[i].equals(expectedResult[i])){
+			System.out.println("result[i]: " + result[i] + " expectedResult[i]: " + expectedResult[i]);
             allTrue = false;
+			break;
          }
       }
       assertEquals(allTrue, true);

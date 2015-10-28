@@ -114,7 +114,7 @@ public class LongIntegerPolynomialKaratsubaTests {
         assertEquals(true, expectBool);
     }
     @Test
-    public void testKaratsubaMultiplyCommutativeMultiply(){
+    public void testPolynomialKaratsubaMultiplyCommutativeMultiply(){
         System.out.println("Test: Commutative Multiply");
        ArrayList<LongInteger> polyList = new ArrayList<LongInteger>();
 		for(int i = 0; i < 15; i++){

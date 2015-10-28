@@ -40,37 +40,36 @@ public class LongIntegerPolynomialCRATests {
 
    }
    
+   @Test
    public void testPolynomialCRAWorks(){
       System.out.println("Test: polynomial CRA");
       LongInteger.changeModulus(LongInteger.valueOf(5));
 
-      LongIntegerPolynomial[] v = new LongIntegerPolynomial[5];
+      //LongIntegerPolynomial[] v = new LongIntegerPolynomial[5];
+	  LongIntegerPolynomial[] v = new LongIntegerPolynomial[3];
       v[0] = LongIntegerPolynomial.ONE;
       LongInteger[] temp1 = {LongInteger.valueOf(0), LongInteger.valueOf(1)};
       v[1] = new LongIntegerPolynomial(temp1);
-      LongInteger[] temp2 = {LongInteger.valueOf(2), LongInteger.valueOf(0), LongInteger.valueOf(-3), LongInteger.valueOf(3)};
+      LongInteger[] temp2 = {LongInteger.valueOf(2), LongInteger.valueOf(4), LongInteger.valueOf(-3), LongInteger.valueOf(1)};
       v[2] = new LongIntegerPolynomial(temp2);
-      LongInteger[] temp3 = {LongInteger.valueOf(1), LongInteger.valueOf(0), LongInteger.valueOf(0), LongInteger.valueOf(0), LongInteger.valueOf(1)};
-      v[3] = new LongIntegerPolynomial(temp3);  
-      LongInteger[] temp4 = {LongInteger.valueOf(0), LongInteger.valueOf(2), LongInteger.valueOf(0), LongInteger.valueOf(3) };
-      v[4] = new LongIntegerPolynomial(temp4); 
-   	LongIntegerPolynomial[] m = new LongIntegerPolynomial[5];
-      LongInteger[] vTemp0 = {LongInteger.valueOf(1), LongInteger.valueOf(1)};
+      LongInteger[] temp3 = {LongInteger.valueOf(1), LongInteger.valueOf(0), LongInteger.valueOf(-2), LongInteger.valueOf(1)};
+      
+	  LongIntegerPolynomial[] m = new LongIntegerPolynomial[3];
+      LongInteger[] vTemp0 = {LongInteger.valueOf(1), LongInteger.valueOf(1)}; //x+1 
       m[0] = new LongIntegerPolynomial(vTemp0);
-      LongInteger[] vTemp1 = {LongInteger.valueOf(1),LongInteger.valueOf(0),LongInteger.valueOf(1)};
+      LongInteger[] vTemp1 = {LongInteger.valueOf(1),LongInteger.valueOf(0),LongInteger.valueOf(1)}; //x^2+1
       m[1] = new LongIntegerPolynomial(vTemp1);
-      LongInteger[] vTemp2 = {LongInteger.valueOf(1),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(1)};
+      LongInteger[] vTemp2 = {LongInteger.valueOf(1),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(1)};//x^4+1
       m[2] = new LongIntegerPolynomial(vTemp2);
-      LongInteger[] vTemp3 = {LongInteger.valueOf(1),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(1)};
-      m[3] = new LongIntegerPolynomial(vTemp3);
-      LongInteger[] vTemp4 = {LongInteger.valueOf(1),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(1)};
-      m[4] = new LongIntegerPolynomial(vTemp4);
+      LongInteger[] vTemp3 = {LongInteger.valueOf(1),LongInteger.valueOf(1),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(0),LongInteger.valueOf(1)}; //x^5+x+1
 
       LongIntegerPolynomial result = LongIntegerPolynomial.cra(v, m);
+	  //System.out.println("Result: " + result);
       boolean allTrue =true;
       for(int i = 0; i < m.length; i++){
          LongIntegerPolynomial tempPoly = result.remainder(m[i]);
          if(!v[i].equals(tempPoly)){
+			System.out.println("i: " + i + " tempPoly: " + tempPoly + " v[i]: " + v[i]);
             allTrue = false;
             break;
          }

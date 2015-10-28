@@ -40,9 +40,10 @@ public class LongIntegerPolynomialLagrangeTests {
 
    }
    
-   @Test
+   @Test (expected=ParserException.class)
    public void testlagrangeAllZero(){
       System.out.println("Test: Lagrange interpolant of a bunch of 0 points");
+	  LongInteger.changeModulus(LongInteger.valueOf(5));
       LongInteger[] input = new LongInteger[10];
       Arrays.fill(input, LongInteger.ZERO);
       LongIntegerPolynomial[] result = LongIntegerPolynomial.lagrangeInterpolants(input);
@@ -55,6 +56,7 @@ public class LongIntegerPolynomialLagrangeTests {
       }
       assertEquals(allTrue, true);
    }
+   @Test
    public void testInterpolantWorks(){
       System.out.println("Test: polynomial interpolate function works");
       LongInteger.changeModulus(LongInteger.valueOf(17));
@@ -62,8 +64,11 @@ public class LongIntegerPolynomialLagrangeTests {
       LongInteger[] vPoints = {LongInteger.valueOf(2), LongInteger.valueOf(5), LongInteger.valueOf(6), LongInteger.valueOf(15), LongInteger.valueOf(4)};
       LongIntegerPolynomial result = LongIntegerPolynomial.interpolate(uPoints, vPoints);
 
-      LongInteger[] answerList = {LongInteger.valueOf(5), LongInteger.valueOf(2), LongInteger.valueOf(2), LongInteger.valueOf(14)};
+      LongInteger[] answerList = {LongInteger.valueOf(5), LongInteger.valueOf(0),LongInteger.valueOf(2), LongInteger.valueOf(2), LongInteger.valueOf(14)};
       LongIntegerPolynomial expectedResult = new LongIntegerPolynomial(answerList);
-      assertEquals(result, expectedResult);
+	  
+	  boolean passedTest = expectedResult.equals(result);
+	  
+      assertEquals(passedTest, true);
    }   
 }

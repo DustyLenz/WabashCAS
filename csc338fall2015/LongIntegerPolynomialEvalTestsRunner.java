@@ -18,7 +18,7 @@ public class LongIntegerPolynomialEvalTestsRunner {
       for (Failure failure : result.getFailures()) {
          System.out.println(failure.toString());
       }
-      System.out.println("\nProject 2 Tests Complete. No Errors: " + result.wasSuccessful() + "\n");
+      System.out.println("\nLongInteger Polynomial Eval Tests Complete. No Errors: " + result.wasSuccessful() + "\n");
    }
 }
 

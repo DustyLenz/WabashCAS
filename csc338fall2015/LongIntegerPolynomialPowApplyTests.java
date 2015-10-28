@@ -74,9 +74,10 @@ public class LongIntegerPolynomialPowApplyTests {
    }
    @Test
    public void testPolynomialPowWorks(){
+	  LongInteger.changeModulus(LongInteger.ZERO);
       System.out.println("Test: raise polynomial to random power");
       //Answer from mathematica
-      int[] answerIntList ={1, 20, 160, 655, 1520, 2464, 3930, 4920, 4320, 6030, 2160, 4320, 405, 1620, 0, 243};
+      int[] answerIntList ={243, 0, 1620, 405, 4320, 2160, 6030, 4320, 4920, 3930, 2464, 1520, 655, 160, 20, 1};
       ArrayList<LongInteger> answerList = new ArrayList<LongInteger>();
 
       for(int i = 0; i < answerIntList.length; i++){
@@ -91,8 +92,11 @@ public class LongIntegerPolynomialPowApplyTests {
       LongIntegerPolynomial polyA = new LongIntegerPolynomial(polyList);
 
       LongIntegerPolynomial result = polyA.pow(LongInteger.valueOf(5));
-
-      assertEquals(expectedResult, result);
+	  boolean testPassed = result.equals(expectedResult);
+	  if(!testPassed){
+	     System.out.println("result: " + result + " expectedResult: " + expectedResult);
+	  }
+      assertEquals(testPassed, true);
 
    }
    @Test
@@ -120,8 +124,10 @@ public class LongIntegerPolynomialPowApplyTests {
 
       LongIntegerPolynomial result = polyA.pow(LongInteger.valueOf(-11));
 
-      assertEquals(expectedResult, result);
-
+      boolean testPassed = result.equals(expectedResult);
+      assertEquals(testPassed, true);
+	  LongInteger.changeModulus(LongInteger.ZERO);
+	  LongIntegerPolynomial.changeModulus(LongIntegerPolynomial.ZERO);
    }
    @Test
    public void testPolynomialApplyZero(){ 
@@ -140,16 +146,16 @@ public class LongIntegerPolynomialPowApplyTests {
 
       LongInteger result = polyA.apply(LongInteger.ZERO);
 
-      LongInteger expectedResult = LongInteger.ZERO;
-
-      assertEquals(expectedResult, result);
+      LongInteger expectedResult = polyList.get(0);
+	  boolean testPassed = result.equals(expectedResult);
+      assertEquals(testPassed, true);
    }
    @Test
    public void testPolynomialApplyWorks(){
       System.out.println("Test: polynomial apply function works");
-      int[] inputIntList = {5, 0, 4, 0, 3, 0, 0, 15, 27, 0, 3, 1};
+      int[] inputIntList = {1, 3, 0, 27, 15, 0, 0, 3, 0, 4, 0, 5};
       ArrayList<LongInteger> inputList = new ArrayList<LongInteger>();
-      for(int i: inputIntList){
+      for(int i = 0; i < inputIntList.length; i++){
          inputList.add(LongInteger.valueOf(inputIntList[i]));
       }
       LongIntegerPolynomial polyA = new LongIntegerPolynomial(inputList);
@@ -157,8 +163,8 @@ public class LongIntegerPolynomialPowApplyTests {
       LongInteger result = polyA.apply(LongInteger.valueOf(5));
 
       LongInteger expectedResult = LongInteger.valueOf("252200266");
-
-      assertEquals(result, expectedResult);
+	  boolean testPassed = result.equals(expectedResult);
+      assertEquals(testPassed, true);
    }
    
 }

@@ -47,15 +47,15 @@ public class LongIntegerKaratsubaTests {
 
       LongInteger expectedResult = LongInteger.ZERO;
       LongInteger result = a.karatsuba(LongInteger.ZERO);
-      assertEquals(expectedResult, result);
+      assertEquals(expectedResult.toString(), result.toString());
    }
    @Test
    public void testKaratsubaMultiplyOne(){
       System.out.println("Test: Karatsuba multiply by one");
-      LongInteger a = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(4));
+      LongInteger a = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(6));
       LongInteger expectedResult = new LongInteger(a);
       LongInteger result = a.karatsuba(LongInteger.ONE);
-      assertEquals(expectedResult, result);
+      assertEquals(expectedResult.toString(), result.toString());
    }
    @Test
    public void testKaratsbuaCommutative(){
@@ -65,7 +65,7 @@ public class LongIntegerKaratsubaTests {
 
       LongInteger expectedResult = a.karatsuba(b);
       LongInteger result = b.karatsuba(a);
-      assertEquals(result, expectedResult);
+      assertEquals(result.toString(), expectedResult.toString());
    }
    @Test
    public void testKaratsubaPositiveMultiplyPositive(){
@@ -74,11 +74,14 @@ public class LongIntegerKaratsubaTests {
       String valB = CSC338Utils.generateNDigitNumber(5);
       LongInteger a = LongInteger.valueOf(valA);
       LongInteger b = LongInteger.valueOf(valB);
-
+	  System.out.println("a: " + a + " b: " + b);
       LongInteger result = a.karatsuba(b);
       LongInteger expectedResult = a.multiply(b);
-
-      assertEquals(result, expectedResult);
+	  boolean passedTest = result.equals(expectedResult);
+	  if(!passedTest){
+		System.out.println("Test failed! result: " + result + " expectedResult: " + expectedResult);
+	  }
+      assertEquals(passedTest, true);
    }
    @Test
    public void testKaratsubaNegativeMultiplyNegative(){  
@@ -91,7 +94,8 @@ public class LongIntegerKaratsubaTests {
       b.negate();
       LongInteger result = a.karatsuba(b);
       LongInteger expectedResult = a.multiply(b);
-      assertEquals(result, expectedResult);   
+      boolean passedTest = result.equals(expectedResult);
+      assertEquals(passedTest, true); 
    }
    @Test
    public void testKaratsubaNegativeMultiplyPositive(){ 
@@ -103,6 +107,8 @@ public class LongIntegerKaratsubaTests {
       a.negate();
       LongInteger result = a.karatsuba(b);
       LongInteger expectedResult = a.multiply(b);
+	  boolean passedTest = result.equals(expectedResult);
+      assertEquals(passedTest, true);
    }
    
 }

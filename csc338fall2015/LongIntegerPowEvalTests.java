@@ -46,6 +46,8 @@ public class LongIntegerPowEvalTests {
       LongInteger a = LongInteger.valueOf(valA);
       LongInteger expectedResult = LongInteger.ONE; 
       LongInteger result = a.pow(LongInteger.ZERO);
+	  
+	  
       assertEquals(expectedResult, result);
    }
    @Test
@@ -59,14 +61,20 @@ public class LongIntegerPowEvalTests {
    @Test
    public void testIntNegativePower(){
       System.out.println("Test: Raise integer to a random negative power");
-      LongInteger.changeModulus(LongInteger.valueOf(101));
+
       LongInteger a = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(5));
-      LongInteger b = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
-      b.negate();
+      LongInteger b = LongInteger.valueOf("-"+CSC338Utils.generateNDigitNumber(2));
+	  LongInteger.changeModulus(LongInteger.valueOf(101));
+	  //System.out.println("negB.positive(): " + b.positive());
       LongInteger result = a.pow(b);
-      b.negate();
-      LongInteger expectedResult = a.inverse().pow(b);
-      assertEquals(expectedResult, result);
+      LongInteger expectedResult = a.inverse().pow(b.negate());
+	  
+	  boolean testPassed = expectedResult.equals(result);
+	  if(!testPassed){
+		System.out.println("a: " + a + " b: " + b);
+		System.out.println("result: " + result + " expectedResult: " + expectedResult);
+	  }
+      assertEquals(testPassed, true);
       LongInteger.changeModulus(LongInteger.ZERO);
    }
    @Test
@@ -77,6 +85,7 @@ public class LongIntegerPowEvalTests {
       BigInteger bigIntA = new BigInteger(valA);
       LongInteger a = LongInteger.valueOf(valA);
       BigInteger expectedResult = bigIntA.pow(pow);
+	  //System.out.println("result: " + result + " expectedResult: " + expectedResult);
       LongInteger result = a.pow(LongInteger.valueOf(pow));
       assertEquals(expectedResult.toString(), result.toString());
    }
@@ -89,7 +98,10 @@ public class LongIntegerPowEvalTests {
       LongInteger expectedResult = new LongInteger(a.evaluate(moduli)[0]);
       a.changeModulus(a);
       a = a.add(LongInteger.ZERO);
-      assertEquals(a, expectedResult);
+	  
+	  boolean testPassed = a.equals(expectedResult);
+	  
+      assertEquals(testPassed, true);
    }
    @Test
    public void testIntEvaluate(){
@@ -113,7 +125,9 @@ public class LongIntegerPowEvalTests {
       boolean allTrue = true;
       for(int i =0 ; i< result.length; i++){
          BigInteger temp = new BigInteger(stringValue);
-         if(!(temp.mod(new BigInteger(vals[i])).toString().equals(moduli[i].toString()))){
+		 BigInteger tempMod = new BigInteger(vals[i]);
+         if(!(temp.mod(tempMod).toString().equals(result[i].toString()))){
+			System.out.println("tempMod: " + tempMod + " result[i]: "  + result[i]);
             allTrue = false;
             break;
          }
