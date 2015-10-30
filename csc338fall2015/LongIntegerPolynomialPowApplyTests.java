@@ -148,6 +148,9 @@ public class LongIntegerPolynomialPowApplyTests {
 
       LongInteger expectedResult = polyList.get(0);
 	  boolean testPassed = result.equals(expectedResult);
+	  if(!testPassed){
+		System.out.println("expectedResult: " + expectedResult + " result: " + result);
+	  }
       assertEquals(testPassed, true);
    }
    @Test
@@ -164,6 +167,10 @@ public class LongIntegerPolynomialPowApplyTests {
 
       LongInteger expectedResult = LongInteger.valueOf("252200266");
 	  boolean testPassed = result.equals(expectedResult);
+	  if(!testPassed){
+		  System.out.println("expectedResult: " + expectedResult + " result: " + result);
+	  }
+	  
       assertEquals(testPassed, true);
    }
    

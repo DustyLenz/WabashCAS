@@ -405,7 +405,7 @@ public class LongIntegerPolynomial {
     public LongIntegerPolynomial[] divideAndRemainder(LongIntegerPolynomial poly) {
         LongIntegerPolynomial[] returnArray = new LongIntegerPolynomial[2];
         if (modular()) {
-            System.out.println("Modular Boys");
+            //System.out.println("Modular Boys");
             // Ensure not dividing by zero
             int polyDegree = poly.degree();
             if (polyDegree < 0) {
@@ -475,30 +475,30 @@ public class LongIntegerPolynomial {
             
             LongInteger denomLeadingDigit = denominator.coeffs.get(poly.degree());
             for (int i = 0; i <= numerator.degree(); i++) {
-                System.out.println("Quotient: " + quotient);
+                //System.out.println("Quotient: " + quotient);
                 LongInteger numLeadingDigit = quotient.get(quotient.size() - 1);
 
                 LongInteger trialDigit = numLeadingDigit.divide(denomLeadingDigit);
-                System.out.println("Trial Digit: " + trialDigit.toString());
+                //System.out.println("Trial Digit: " + trialDigit.toString());
 
                 ArrayList<LongInteger> tempList = new ArrayList<LongInteger>();
                 tempList.add(trialDigit);
                 LongIntegerPolynomial trialPoly = new LongIntegerPolynomial(tempList);
                 int difference = new LongIntegerPolynomial(quotient).degree() - denominator.degree();
-                System.out.println("difference: " + difference);
+                //System.out.println("difference: " + difference);
                 if (difference < 0) {
                     break;
                 }
 
                 trialPoly = trialPoly.shift((new LongIntegerPolynomial(quotient)).degree() - denominator.degree());
-                System.out.println("trialPoly.degree() - i : " + (trialPoly.degree() - i));
+                //System.out.println("trialPoly.degree() - i : " + (trialPoly.degree() - i));
                 
                 
                 //System.out.println("Denom" + denominator.toString());
                 //System.out.println("Multiply denom: " + denominator.multiply(trialPoly).toString());
-                System.out.println("Trial Poly: " + trialPoly.toString());
+                //System.out.println("Trial Poly: " + trialPoly.toString());
                 LongIntegerPolynomial tempQuotient = (new LongIntegerPolynomial(quotient)).subtract(denominator.multiply(trialPoly));
-               System.out.println("tempQuo: " + tempQuotient.toString());
+                //System.out.println("tempQuo: " + tempQuotient.toString());
                 quotient = tempQuotient.coeffs;
                 //System.out.println("Bottom loop quotient: " + quotient);
                 returnDigitList.set(trialPoly.degree(), trialDigit);
@@ -575,17 +575,17 @@ public class LongIntegerPolynomial {
         LongIntegerPolynomial oldT = LongIntegerPolynomial.ZERO;
 
         while (!r.equals(LongIntegerPolynomial.ZERO)) {
-            System.out.println("OldR: " + oldR + " r: " + r);
+            //System.out.println("OldR: " + oldR + " r: " + r);
             LongIntegerPolynomial quotient = oldR.divideAndRemainder(r)[0];
 
-            System.out.println("quotient: "+ quotient);
+            //System.out.println("quotient: "+ quotient);
             
             LongIntegerPolynomial temp;
             //Update reminader
             temp = r;
             r = oldR.subtract(quotient.multiply(temp));
             oldR = temp;
-            System.out.println("OldR: " + oldR + " r: " + r);
+            //System.out.println("OldR: " + oldR + " r: " + r);
             //Update S
             temp = s;
             s = oldS.subtract(quotient.multiply(temp));
@@ -600,8 +600,11 @@ public class LongIntegerPolynomial {
         oldR = oldR.multiply(normalizeCoeff.inverse());
 
         result[0] = oldR;
+		
         result[1] = oldS.multiply(normalizeCoeff.inverse());
         result[2] = oldT.multiply(normalizeCoeff.inverse());
+		//result[1] = oldS;
+        //result[2] = oldT;
         changeModulus(tempModulus);
         return result;
     }
@@ -660,7 +663,30 @@ public class LongIntegerPolynomial {
      * @return Result as new LongIntegerPolynomial
      */
     public LongIntegerPolynomial pow(LongInteger l) {
-        throw new UnsupportedOperationException("pow not yet supported");
+        if(l.equals(LongInteger.ZERO)){
+         return LongIntegerPolynomial.ONE;
+      }
+      else if(l.equals(LongInteger.ONE)){
+         return this;
+      }    
+      LongInteger power = new LongInteger(l);
+      LongIntegerPolynomial b = new LongIntegerPolynomial(this);
+      //Check if l is negative
+      //System.out.println("l.positive(): " + l.positive());
+      if(!l.positive()){
+      //   System.out.println("Neg power");
+         b = this.inverse();
+         power = power.negate();
+      }
+      LongIntegerPolynomial result = LongIntegerPolynomial.ONE;
+      ArrayList<Integer> lBinary = LongInteger.convertBase((ArrayList<Integer>) power.digits(), power.radix(), 2);
+      for(int i = 0; i < lBinary.size(); i++){
+         if(lBinary.get(i) == Integer.valueOf(1)){
+            result = result.multiply(b);
+         }
+         b = b.multiply(b);
+      }
+      return result;
     }
 
     /**
@@ -670,7 +696,18 @@ public class LongIntegerPolynomial {
      * @return
      */
     public LongInteger apply(LongInteger u) {
-        throw new UnsupportedOperationException("apply not yet supported");
+	   //Optimization, if applying 0, return the constant term
+	   if(u.equals(LongInteger.ZERO)){
+	      return this.coeffs.get(0);
+	   }
+       //System.out.println("this.degree: " + this.degree());
+       LongInteger result = LongInteger.ZERO;
+       for(int i = this.degree(); i >= 0; i--){
+        // System.out.println("Current coeff: " + this.coeffs.get(i));
+         result = (result.multiply(u)).add(this.coeffs.get(i));
+        // System.out.println("Result: " + result);
+       }
+		return result;
     }
 
     /**
@@ -680,7 +717,12 @@ public class LongIntegerPolynomial {
      * @return Array of values
      */
     public LongInteger[] evaluate(LongInteger[] u) {
-        throw new UnsupportedOperationException("evaluate not yet supported");
+      LongInteger[] result = new LongInteger[u.length];
+      for(int i = 0; i < result.length; i++){
+         //System.out.println("applying at " + u[i]);
+         result[i] = this.apply(u[i]);
+      }
+      return result;
     }
 
     /**
@@ -690,7 +732,25 @@ public class LongIntegerPolynomial {
      * @return Array of interpolants
      */
     public static LongIntegerPolynomial[] lagrangeInterpolants(LongInteger[] u) {
-        throw new UnsupportedOperationException("lagrangeIterpolants not yet supported");
+        LongIntegerPolynomial[] result = new LongIntegerPolynomial[u.length];
+		for(int i = 0; i < u.length; i++){
+			LongInteger constant = LongInteger.ONE;
+			LongIntegerPolynomial polySum = LongIntegerPolynomial.ONE;
+			for(int j = 0; j < u.length; j++){
+				if(i != j){
+					constant = constant.multiply(u[i].subtract(u[j]));
+					LongInteger[] tempPolyList = new LongInteger[2];
+					tempPolyList[0] = u[j].negate();
+					tempPolyList[1] = LongInteger.ONE;
+ 					polySum = polySum.multiply(new LongIntegerPolynomial(tempPolyList));
+				}
+				
+			}
+			
+			LongInteger inverseConst = constant.inverse();
+			result[i] = polySum.multiply(inverseConst);
+		}
+		return result;
     }
 
     /**
@@ -701,7 +761,12 @@ public class LongIntegerPolynomial {
      * @return
      */
     public static LongIntegerPolynomial interpolate(LongInteger[] u, LongInteger[] v) {
-        throw new UnsupportedOperationException("interpolate not yet supported");
+        LongIntegerPolynomial[] lagrangeInterpol = LongIntegerPolynomial.lagrangeInterpolants(u);
+		LongIntegerPolynomial result = LongIntegerPolynomial.ZERO;
+		for(int i = 0; i < u.length; i++){
+			result = result.add(lagrangeInterpol[i].multiply(v[i]));
+		}
+		return result;
     }
 
     /**
@@ -712,7 +777,22 @@ public class LongIntegerPolynomial {
      * @return
      */
     public static LongIntegerPolynomial cra(LongIntegerPolynomial[] v, LongIntegerPolynomial[] m) {
-        throw new UnsupportedOperationException("CRA not yet supported");
+       LongIntegerPolynomial cTotal = LongIntegerPolynomial.ZERO;
+      for(int i=0; i<m.length ; i++)
+      {
+       LongIntegerPolynomial mTotal = LongIntegerPolynomial.ONE; 
+       for(int j=0; j<m.length ; j++)
+       {
+        if(i!=j)
+        {
+         mTotal = mTotal.multiply(m[j]); 
+        }
+       }
+       LongIntegerPolynomial[] EEAresult = new LongIntegerPolynomial[3];
+       EEAresult = mTotal.traditionalEEA(m[i]);
+       cTotal = cTotal.add(((EEAresult[1].multiply(v[i])).remainder(m[i])).multiply(mTotal));
+      }
+      return cTotal;
     }
 
     /**
@@ -722,9 +802,56 @@ public class LongIntegerPolynomial {
      * @return Result as new LongIntegerPolynomial
      */
     public LongIntegerPolynomial karatsuba(LongIntegerPolynomial poly) {
-        throw new UnsupportedOperationException("karatsuba not yet supported");
-    }
+        //Check if this or x is 0
+      //
+      if(this.equals(LongIntegerPolynomial.ZERO) || poly.equals(LongIntegerPolynomial.ZERO)){
+         return LongIntegerPolynomial.ZERO;
+      }
+      //Initialize bitlength and find larger length
+      int bitLength = Math.max(poly.degree()+1, this.degree()+1);
+      int originalBitLength = bitLength;
+      //System.out.println("BitLength: " + bitLength);
+      //System.out.println("In karatsuba function");
+      //End recursion if bitlength =1
+      if(bitLength < 2){
+         // System.out.println("Base case");
+         return this.multiply(poly);
+      }
 
+      //Calculate bitlength, rounded up
+      bitLength = (bitLength/2) + (bitLength % 2); 
+
+      //System.out.println("Real BitLength: " + bitLength);
+      //Define F_1
+      LongIntegerPolynomial F_1 = this.shiftRight(bitLength);
+      //System.out.println("this: " + this + " F_1: " + F_1);
+      //System.out.println("F_1 length: " + F_1.length());
+      //System.out.println("this: " + this);
+      LongIntegerPolynomial F_0 = this.subtract(F_1.shift(bitLength));
+      LongIntegerPolynomial G_1 = poly.shiftRight(bitLength);
+      LongIntegerPolynomial G_0 = poly.subtract(G_1.shift(bitLength));
+      //System.out.println("F_1: " + F_1 + " F_0:  " + F_0 + " G_1: " +G_1 + " G_0: " + G_0);
+
+      LongIntegerPolynomial F_0G_0 = F_0.karatsuba(G_0);
+      LongIntegerPolynomial F_1G_1 = F_1.karatsuba(G_1);
+      LongIntegerPolynomial F_0F_1G_0G_1 = F_0.add(F_1).karatsuba(G_0.add(G_1));
+
+      return (F_0F_1G_0G_1.subtract(F_0G_0).subtract(F_1G_1)).shift(bitLength).add(F_0G_0).add(F_1G_1.shift(bitLength*2)); 
+    }
+	private LongIntegerPolynomial shiftRight(int power){
+      // System.out.println("Shift right by " + power);
+      if(power >= this.degree()+1){
+         return LongIntegerPolynomial.ZERO;
+      }
+      ArrayList<LongInteger> resultList = new ArrayList<LongInteger>();
+      resultList.addAll(this.coeffs);
+      //System.out.println("Before shift: " + resultList.toString());
+      resultList.subList(0, power).clear();
+      //System.out.println("After shift: " + resultList.toString());
+      LongIntegerPolynomial result = new LongIntegerPolynomial(resultList);
+      return result;
+
+   }
     /**
      * Reversal of polynomial Assume k >= degree of this
      *
