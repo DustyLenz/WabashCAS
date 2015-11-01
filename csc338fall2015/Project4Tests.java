@@ -208,10 +208,251 @@ public class Project4Tests {
    }
    @Test
    public void testInversionPolynomialNegCoeff(){
+      System.out.println("Test 11: inversion with all negative coefficients");
+      ArrayList<LongInteger> intList = new ArrayList<LongInteger>();
+      intList.add(LongInteger.valueOf(1));
+      for(int i = 0; i < 6; i++){
+         if(i == 3){
+            intList.add(LongInteger.ZERO);
+         }
+         else{
+            LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+            intList.add(temp.negate());
+         }
+      }
+      LongIntegerPolynomial polyA = new LongIntegerPolynomial(intList);
+      LongIntegerPolynomial result = polyA.inversion(5);
 
+      LongIntegerPolynomial expectedResult = polyA.pow(LongInteger.valueOf(-1));
+
+      ArrayList<LongInteger> modList = (ArrayList<LongInteger>)Collections.nCopies(5, LongInteger.ZERO);
+      modList.add(LongInteger.ONE);
+      LongIntegerPolynomial.changeModulus(new LongIntegerPolynomial(modList));
+
+      boolean testPassed = result.equals(expectedResult);
+      assertEquals(testPassed, true);
+      LongIntegerPolynomial.changeModulus(LongIntegerPolynomial.ZERO);
+      LongInteger.changeModulus(LongInteger.ZERO);
    }
    @Test
    public void testInversionWithPositivePolynomial(){
+      System.out.println("Test 12: Inverting a random positive coefficient polynomnial");
+      ArrayList<LongInteger> intList = new ArrayList<LongInteger>();
+      intList.add(LongInteger.valueOf(1));
+      for(int i = 0; i < 6; i++){
+         if(i == 3){
+            intList.add(LongInteger.ZERO);
+         }
+         else{
+            LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+            intList.add(temp);
+         }
+      }
+      LongIntegerPolynomial polyA = new LongIntegerPolynomial(intList);
+      LongIntegerPolynomial result = polyA.inversion(5);
+
+      LongIntegerPolynomial expectedResult = polyA.pow(LongInteger.valueOf(-1));
+
+      ArrayList<LongInteger> modList = (ArrayList<LongInteger>)Collections.nCopies(5, LongInteger.ZERO);
+      modList.add(LongInteger.ONE);
+      LongIntegerPolynomial.changeModulus(new LongIntegerPolynomial(modList));
+
+      boolean testPassed = result.equals(expectedResult);
+      assertEquals(testPassed, true);
+      LongIntegerPolynomial.changeModulus(LongIntegerPolynomial.ZERO);
+      LongInteger.changeModulus(LongInteger.ZERO);
+   }
+   @Test (expected=ParserException.class)
+   public void fastdivideByZero(){
+      LongIntegerPolynomial divisor = LongIntegerPolynomial.ZERO;
+      ArrayList<LongInteger> intList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 6; i++){
+         if(i == 3){
+            intList.add(LongInteger.ZERO);
+         }
+         else{
+            LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+            intList.add(temp);
+         }
+      }
+      //Make polynomial monic
+      intList.add(LongInteger.ONE);
+      LongIntegerPolynomial polyA = new LongIntegerPolynomial(intList);
       
+      LongIntegerPolynomial[] result = polyA.fastDivideAndRemainder(divisor);
+
+   }
+   @Test
+   public void fastDivideBy1(){
+      LongIntegerPolynomial divisor = LongIntegerPolynomial.ONE;
+      ArrayList<LongInteger> intList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 6; i++){
+         if(i == 3){
+            intList.add(LongInteger.ZERO);
+         }
+         else{
+            LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+            intList.add(temp);
+         }
+      }
+      LongIntegerPolynomial polyA = new LongIntegerPolynomial(intList);
+      
+      LongIntegerPolynomial[] result = polyA.fastDivideAndRemainder(divisor);
+
+      boolean testPassed = result[0].equals(polyA);
+      testPassed =  result[1].equals(LongIntegerPolynomial.ZERO);
+
+      assertEquals(testPassed, true);
+   }
+   @Test
+   public void fastDivideSmallDegreebyBigDegree(){
+      ArrayList<LongInteger> dividendList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 3; i++){
+         LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+         dividendList.add(temp);
+      }
+      ArrayList<LongInteger> divisorList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 6; i++){
+         if(i == 3){
+            divisorList.add(LongInteger.ZERO);
+         }
+         else{
+            LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+            divisorList.add(temp);
+         }
+      }
+      divisorList.add(LongInteger.ONE);
+      LongIntegerPolynomial divisor = new LongIntegerPolynomial(divisorList);
+      LongIntegerPolynomial dividend = new LongIntegerPolynomial(dividendList);
+
+
+      LongIntegerPolynomial[] result = dividend.fastDivideAndRemainder(divisor);
+
+      boolean testPassed = result[0].equals(LongIntegerPolynomial.ZERO);
+      testPassed = result[1].equals(dividend);
+      assertEquals(testPassed, true);
+   }
+   @Test
+   public void fastDivideNegativeCoeffByPositiveCoeff(){
+      ArrayList<LongInteger> divisorList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 3; i++){
+         LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+         divisorList.add(temp);
+      }
+      divisorList.add(LongInteger.ONE);
+      ArrayList<LongInteger> dividendList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 8; i++){
+         if(i == 3){
+            dividendList.add(LongInteger.ZERO);
+         }
+         else{
+            LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+            dividendList.add(temp.negate());
+         }
+      }
+      LongIntegerPolynomial divisor = new LongIntegerPolynomial(divisorList);
+      LongIntegerPolynomial dividend = new LongIntegerPolynomial(dividendList);
+
+
+      LongIntegerPolynomial[] result = dividend.fastDivideAndRemainder(divisor);
+
+      //Undo the division
+      LongIntegerPolynomial undoResult = (result[0].karatsuba(divisor)).add(result[1]);
+
+      boolean testPassed = undoResult.equals(dividend);
+      assertEquals(testPassed, true);
+
+   }
+   @Test
+   public void fastDividePositiveCoeffByNegativeCoeff(){
+      ArrayList<LongInteger> divisorList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 3; i++){
+         LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+         divisorList.add(temp.negate());
+      }
+      divisorList.add(LongInteger.ONE);
+      ArrayList<LongInteger> dividendList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 8; i++){
+         if(i == 3){
+            dividendList.add(LongInteger.ZERO);
+         }
+         else{
+            LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+            dividendList.add(temp);
+         }
+      }
+      LongIntegerPolynomial divisor = new LongIntegerPolynomial(divisorList);
+      LongIntegerPolynomial dividend = new LongIntegerPolynomial(dividendList);
+
+
+      LongIntegerPolynomial[] result = dividend.fastDivideAndRemainder(divisor);
+
+      //Undo the division
+      LongIntegerPolynomial undoResult = (result[0].karatsuba(divisor)).add(result[1]);
+
+      boolean testPassed = undoResult.equals(dividend);
+      assertEquals(testPassed, true);
+
+   }
+   @Test
+   public void fastDivideNegativeCoeffByNegativeCoeff(){
+      ArrayList<LongInteger> divisorList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 3; i++){
+         LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+         divisorList.add(temp.negate());
+      }
+      divisorList.add(LongInteger.ONE);
+      ArrayList<LongInteger> dividendList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 8; i++){
+         if(i == 3){
+            dividendList.add(LongInteger.ZERO);
+         }
+         else{
+            LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+            dividendList.add(temp.negate());
+         }
+      }
+      LongIntegerPolynomial divisor = new LongIntegerPolynomial(divisorList);
+      LongIntegerPolynomial dividend = new LongIntegerPolynomial(dividendList);
+
+
+      LongIntegerPolynomial[] result = dividend.fastDivideAndRemainder(divisor);
+
+      //Undo the division
+      LongIntegerPolynomial undoResult = (result[0].karatsuba(divisor)).add(result[1]);
+
+      boolean testPassed = undoResult.equals(dividend);
+      assertEquals(testPassed, true);
+
+   }
+   @Test
+   public void fastDividePositiveByPositive(){
+      ArrayList<LongInteger> divisorList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 3; i++){
+         LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+         divisorList.add(temp);
+      }
+      divisorList.add(LongInteger.ONE);
+      ArrayList<LongInteger> dividendList = new ArrayList<LongInteger>();
+      for(int i = 0; i < 8; i++){
+         if(i == 3){
+            dividendList.add(LongInteger.ZERO);
+         }
+         else{
+            LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
+            dividendList.add(temp);
+         }
+      }
+      LongIntegerPolynomial divisor = new LongIntegerPolynomial(divisorList);
+      LongIntegerPolynomial dividend = new LongIntegerPolynomial(dividendList);
+
+
+      LongIntegerPolynomial[] result = dividend.fastDivideAndRemainder(divisor);
+
+      //Undo the division
+      LongIntegerPolynomial undoResult = (result[0].karatsuba(divisor)).add(result[1]);
+
+      boolean testPassed = undoResult.equals(dividend);
+      assertEquals(testPassed, true);
    }
 }

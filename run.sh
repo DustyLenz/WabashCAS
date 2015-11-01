@@ -1,1 +1,1 @@
-java -cp /home/dustylenz/MAT338:/home/dustylenz/MAT338/junit-4.12.jar:/home/dustylenz/MAT338/hamcrest-all-1.3.jar csc338fall2015/$1
+java -cp /home/sudsylent/WabashCAS:/home/sudsylent/WabashCAS/junit-4.12.jar:/home/sudsylent/WabashCAS/hamcrest-all-1.3.jar csc338fall2015/$1
