@@ -860,6 +860,11 @@ public class LongIntegerPolynomial {
      */
     public LongIntegerPolynomial reversal(int k) {
         throw new UnsupportedOperationException("reversal not yet supported");
+		/*
+        LongIntegerPolynomial inputPoly = new LongIntegerPolynomial(this);
+        if(k > this.degree(){
+            
+        }*/
     }
 
     /**
