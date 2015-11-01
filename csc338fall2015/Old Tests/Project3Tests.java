@@ -144,34 +144,13 @@ public class Project3Tests {
       String valB = CSC338Utils.generateNDigitNumber(5);
       LongInteger a = LongInteger.valueOf(valA);
       LongInteger b = LongInteger.valueOf(valB);
-      a = a.negate();
+      a.negate();
       LongInteger result = a.karatsuba(b);
       LongInteger expectedResult = a.multiply(b);
 	  boolean passedTest = result.equals(expectedResult);
       assertEquals(passedTest, true);
    }
-   @Test
-   public void testKaratsubaPositiveMultiplyNegative(){
-      System.out.println("Test: Karatsuba multiplying a positive by negative");
-      String valA = CSC338Utils.generateNDigitNumber(5);
-      String valB = CSC338Utils.generateNDigitNumber(5);
-      LongInteger a = LongInteger.valueOf(valA);
-      LongInteger b = LongInteger.valueOf(valB);
-      a = a.negate();
-      LongInteger result = b.karatsuba(a);
-      LongInteger expectedResult = b.multiply(a);
-	  boolean passedTest = result.equals(expectedResult);
-      assertEquals(passedTest, true);
-   }
-   /*@Test
-   public void testKaratsubaTurnerTests(){
-	   System.out.println("Test: Turner's tests");
-	   int intA = -12345;
-	   int intB = 678;
-	   LongInteger a = LongInteger.valueOf(a);
-	   LongInteger b = LongInteger.valueOf(b);
-	   
-   }*/
+   
    @Test
    public void testPolynomialCRAWorks(){
       System.out.println("Test: polynomial CRA");

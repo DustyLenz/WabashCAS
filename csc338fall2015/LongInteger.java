@@ -8,16 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
-import org.junit.runners.MethodSorters;
-
-import org.junit.FixMethodOrder;
-import org.junit.Test;
 
 /** Multiprecision integer class
  *
  * @author turnerw
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LongInteger {
 
    // Declare static members first so can use later
@@ -1230,54 +1225,36 @@ public class LongInteger {
       if(this.equals(LongInteger.ZERO) || x.equals(LongInteger.ZERO)){
          return LongInteger.ZERO;
       }
-	  //sign of answer
-	  boolean realSign = (this.positive() == x.positive());
-	  //Make both positiv, fix signs later
-	  LongInteger thisCopy = new LongInteger(this);
-	  LongInteger xCopy = new LongInteger(x);
-	  
-	  if(!thisCopy.positive()){
-		  thisCopy = thisCopy.negate();
-	  }
-	  
-	  if(!xCopy.positive()){
-		  xCopy = xCopy.negate();
-	  }
-	  
       //Initialize bitlength and find larger length
-      int bitLength = Math.max(xCopy.length(), thisCopy.length());
+      int bitLength = Math.max(x.length(), this.length());
       int originalBitLength = bitLength;
       //System.out.println("BitLength: " + bitLength);
       //System.out.println("In karatsuba function");
       //End recursion if bitlength =1
       if(bitLength < 2){
          // System.out.println("Base case");
-         return thisCopy.multiply(xCopy);
+         return this.multiply(x);
       }
-	  
+
       //Calculate bitlength, rounded up
       bitLength = (bitLength/2) + (bitLength % 2); 
 
       //System.out.println("Real BitLength: " + bitLength);
       //Define F_1
-      LongInteger F_1 = thisCopy.shiftRight(bitLength);
+      LongInteger F_1 = this.shiftRight(bitLength);
       //System.out.println("this: " + this + " F_1: " + F_1);
       //System.out.println("F_1 length: " + F_1.length());
       //System.out.println("this: " + this);
-      LongInteger F_0 = thisCopy.subtract(F_1.shift(bitLength));
-      LongInteger G_1 = xCopy.shiftRight(bitLength);
-      LongInteger G_0 = xCopy.subtract(G_1.shift(bitLength));
+      LongInteger F_0 = this.subtract(F_1.shift(bitLength));
+      LongInteger G_1 = x.shiftRight(bitLength);
+      LongInteger G_0 = x.subtract(G_1.shift(bitLength));
       //System.out.println("F_1: " + F_1 + " F_0:  " + F_0 + " G_1: " +G_1 + " G_0: " + G_0);
 
       LongInteger F_0G_0 = F_0.karatsuba(G_0);
       LongInteger F_1G_1 = F_1.karatsuba(G_1);
       LongInteger F_0F_1G_0G_1 = F_0.add(F_1).karatsuba(G_0.add(G_1));
-	
-	  LongInteger result = (F_0F_1G_0G_1.subtract(F_0G_0).subtract(F_1G_1)).shift(bitLength).add(F_0G_0).add(F_1G_1.shift(bitLength*2));
-	  if(!realSign){
-		  result = result.negate();
-	  }
-      return result; 
+
+      return (F_0F_1G_0G_1.subtract(F_0G_0).subtract(F_1G_1)).shift(bitLength).add(F_0G_0).add(F_1G_1.shift(bitLength*2)); 
    }
    private LongInteger shiftRight(int power){
       // System.out.println("Shift right by " + power);
