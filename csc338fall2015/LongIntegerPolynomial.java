@@ -885,7 +885,14 @@ public class LongIntegerPolynomial {
      * @return Result as a new LongIntegerPolynomial
      */
     public LongIntegerPolynomial[] fastDivideAndRemainder(LongIntegerPolynomial poly) {
-        throw new UnsupportedOperationException("not supported yet");
+        int deg_a = this.degree();  int deg_b = poly.degree();
+        if (deg_a < deg_b) return [ZERO, this];
+        int m = deg_a - deg_b;
+        LongIntegerPolynomial rev_b = poly.reverse(deg_b).inversion(m+1);
+        LongIntegerPolynomial q_ = new LongIntegerPolynomial(this.reverse(deg_a).multiply(rev_b).coeffs.subList(0,m));
+        LongIntegerPolynomial q = q_.reverse(m);
+        LongIntegerPolynomial r = this - poly.multiply(q_);
+        return [q, r];
     }
 
     /**
