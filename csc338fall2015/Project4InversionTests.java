@@ -86,7 +86,7 @@ public class Project4InversionTests {
       System.out.println("Test 10: Inversion with 1 at a random l");
       LongIntegerPolynomial polyA = LongIntegerPolynomial.ONE;
       int l = (int) Math.random()*9+1;
-      LongIntegerPolynomial result = polyA.inversion(6);
+      LongIntegerPolynomial result = polyA.inversion(1);
       boolean testPassed = result.equals(LongIntegerPolynomial.ONE);
       assertEquals(testPassed, true);
    }
@@ -106,14 +106,14 @@ public class Project4InversionTests {
       }
       LongIntegerPolynomial polyA = new LongIntegerPolynomial(intList);
       LongIntegerPolynomial result = polyA.inversion(5);
-
-      LongIntegerPolynomial expectedResult = polyA.pow(LongInteger.valueOf(-1));
-
-      ArrayList<LongInteger> modList = (ArrayList<LongInteger>)Collections.nCopies(5, LongInteger.ZERO);
+	  
+	  ArrayList<LongInteger> modList = new ArrayList<LongInteger>(Collections.nCopies(5, LongInteger.ZERO));
       modList.add(LongInteger.ONE);
       LongIntegerPolynomial.changeModulus(new LongIntegerPolynomial(modList));
-
-      boolean testPassed = result.equals(expectedResult);
+	  //Check: f*f^-1 = 1 mod x^l
+	  LongIntegerPolynomial check = result.multiply(polyA);
+	  //System.out.println("check: " + check);
+      boolean testPassed = check.equals(LongIntegerPolynomial.ONE);
       assertEquals(testPassed, true);
       LongIntegerPolynomial.changeModulus(LongIntegerPolynomial.ZERO);
       LongInteger.changeModulus(LongInteger.ZERO);
@@ -134,14 +134,14 @@ public class Project4InversionTests {
       }
       LongIntegerPolynomial polyA = new LongIntegerPolynomial(intList);
       LongIntegerPolynomial result = polyA.inversion(5);
-
-      LongIntegerPolynomial expectedResult = polyA.pow(LongInteger.valueOf(-1));
-
-      ArrayList<LongInteger> modList = (ArrayList<LongInteger>)Collections.nCopies(5, LongInteger.ZERO);
+	  
+	  ArrayList<LongInteger> modList = new ArrayList<LongInteger>(Collections.nCopies(5, LongInteger.ZERO));
       modList.add(LongInteger.ONE);
       LongIntegerPolynomial.changeModulus(new LongIntegerPolynomial(modList));
-
-      boolean testPassed = result.equals(expectedResult);
+	  //Check: f*f^-1 = 1 mod x^l
+	  LongIntegerPolynomial check = result.multiply(polyA);
+	  System.out.println("check: " + check);
+      boolean testPassed = check.equals(LongIntegerPolynomial.ONE);
       assertEquals(testPassed, true);
       LongIntegerPolynomial.changeModulus(LongIntegerPolynomial.ZERO);
       LongInteger.changeModulus(LongInteger.ZERO);
