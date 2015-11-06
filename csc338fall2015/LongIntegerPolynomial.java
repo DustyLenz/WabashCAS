@@ -674,8 +674,9 @@ public class LongIntegerPolynomial {
       //Check if l is negative
       //System.out.println("l.positive(): " + l.positive());
       if(!l.positive()){
-      //   System.out.println("Neg power");
+         //System.out.println("Neg power");
          b = this.inverse();
+		 //System.out.println("b inverse: " + b);
          power = power.negate();
       }
       LongIntegerPolynomial result = LongIntegerPolynomial.ONE;
@@ -859,12 +860,45 @@ public class LongIntegerPolynomial {
      * @return
      */
     public LongIntegerPolynomial reversal(int k) {
-        throw new UnsupportedOperationException("reversal not yet supported");
-		/*
-        LongIntegerPolynomial inputPoly = new LongIntegerPolynomial(this);
-        if(k > this.degree(){
-            
-        }*/
+		//check if k is negative
+		
+		if(k < 0){
+			throw new ParserException("k cannot be negative in reversal.");
+		}
+		
+        LongIntegerPolynomial thisPoly = new LongIntegerPolynomial(this);
+		LongIntegerPolynomial result = new LongIntegerPolynomial();		
+		ArrayList<LongInteger> reversedthis = (ArrayList<LongInteger>) thisPoly.coefficients();
+		Collections.reverse(reversedthis);
+		
+        if(k > this.degree()){
+            ArrayList<LongInteger> returnList = new ArrayList<LongInteger>(Collections.nCopies(k-this.degree(), LongInteger.ZERO));
+			returnList.addAll(reversedthis);
+			result = new LongIntegerPolynomial(returnList);
+        }
+		else if(k < this.degree()){
+			//System.out.println("this: " + this);
+			ArrayList<LongInteger> returnList = new ArrayList<LongInteger>(reversedthis.subList(k-1, reversedthis.size()));
+			result = new LongIntegerPolynomial(returnList);
+			//System.out.println("result: " + result);
+			for(int i = 0; i < k-1;i++){
+				LongInteger[] tempList = {LongInteger.ZERO, LongInteger.ONE};
+				LongIntegerPolynomial tempPoly = new LongIntegerPolynomial(tempList);
+				//System.out.println("tempPoly: " + tempPoly);
+				//System.out.println("to the power of: " + (i-k+1));
+				tempPoly = tempPoly.pow(LongInteger.valueOf(i-k+1));
+				//System.out.println("tempPoly: " + tempPoly);
+				tempPoly = tempPoly.multiply(reversedthis.get(i));
+				//System.out.println("tempPoly: " + tempPoly);
+				//System.out.println("result: " + result);
+				result = tempPoly.add(result);
+				//System.out.println("result: " + result);
+			}
+		}
+		else{
+			result = new LongIntegerPolynomial(reversedthis);
+		}
+		return result;
     }
 
     /**
