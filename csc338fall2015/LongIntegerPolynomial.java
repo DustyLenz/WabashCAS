@@ -960,7 +960,7 @@ public class LongIntegerPolynomial {
 	  //System.out.println("rev_b: " + rev_b);
       LongIntegerPolynomial rev_b_inv = rev_b.inversion(m+1);
 	  
-	  LongIntegerPolynomial q_ = (thisCopy.reversal(deg_a)).multiply(rev_b_inv);
+	  LongIntegerPolynomial q_ = (thisCopy.reversal(deg_a)).karatsuba(rev_b_inv);
 	  //System.out.println("q*: " + temp);
 	  //Take modulus
 	  ArrayList<LongInteger> modList = new ArrayList<LongInteger>(Collections.nCopies(m+1, LongInteger.ZERO));
@@ -972,7 +972,7 @@ public class LongIntegerPolynomial {
 	  LongIntegerPolynomial.changeModulus(LongIntegerPolynomial.ZERO);
 	  
       LongIntegerPolynomial q = q_.reversal(m);
-      LongIntegerPolynomial r = this.subtract(poly.multiply(q));
+      LongIntegerPolynomial r = this.subtract(poly.karatsuba(q));
 	  
 	  result[0] = new LongIntegerPolynomial(q);
 	  result[1] = new LongIntegerPolynomial(r);
