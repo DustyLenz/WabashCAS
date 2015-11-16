@@ -20,8 +20,8 @@ import static org.junit.Assert.*;
  *
  * @author DustyLenz
  */
-public class Project4InversionTests {
-   public Project4InversionTests(){
+public class Project5PolyInversionTests {
+   public Project5PolyInversionTests(){
 
    }
    @BeforeClass
@@ -48,8 +48,13 @@ public class Project4InversionTests {
       for(int i = 0; i < 6; i++){
          intList.add(LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2)));
       }
+	  //p = x^2+1
+	  LongInteger[] pList = {LongInteger.ONE, LongInteger.ZERO, LongInteger.ONE};
+	  LongIntegerPolynomial p = new LongIntegerPolynomial(pList);
+	  
       LongIntegerPolynomial polyA = new LongIntegerPolynomial(intList);
-      LongIntegerPolynomial result = polyA.inversion(0);
+	  
+      LongIntegerPolynomial result = polyA.inversion(p, 0, polyA.remainder(p));
       
    }
    @Test (expected=ParserException.class)
@@ -60,33 +65,34 @@ public class Project4InversionTests {
       for(int i = 0; i < 6; i++){
          intList.add(LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2)));
       }
+	  //p = x^2+1
+	  LongInteger[] pList = {LongInteger.ONE, LongInteger.ZERO, LongInteger.ONE};
+	  LongIntegerPolynomial p = new LongIntegerPolynomial(pList);
+	  
       LongIntegerPolynomial polyA = new LongIntegerPolynomial(intList);
-      LongIntegerPolynomial result = polyA.inversion(-5);
+	  
+      LongIntegerPolynomial result = polyA.inversion(p, -5, polyA.remainder(p));
    }
    @Test (expected=ParserException.class)
    public void testInversionZero(){
       System.out.println("Test 8: Inversion with 0 polynomial");
+      
+	  //p = x^2+1
+	  LongInteger[] pList = {LongInteger.ONE, LongInteger.ZERO, LongInteger.ONE};
+	  LongIntegerPolynomial p = new LongIntegerPolynomial(pList);
+	  
       LongIntegerPolynomial polyA = LongIntegerPolynomial.ZERO;
-
-      LongIntegerPolynomial result = polyA.inversion(7);
-   }
-   @Test (expected=ParserException.class)
-   public void testInversionf0NotOne(){
-      System.out.println("Test 9: Inversion with constant term not equal to one");
-      ArrayList<LongInteger> intList = new ArrayList<LongInteger>();
-      intList.add(LongInteger.valueOf(5));
-      for(int i = 0; i < 6; i++){
-         intList.add(LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2)));
-      }
-      LongIntegerPolynomial polyA = new LongIntegerPolynomial(intList);
-      LongIntegerPolynomial result = polyA.inversion(5);      
+	  
+      LongIntegerPolynomial result = polyA.inversion(p, 0, LongIntegerPolynomial.ZERO);
    }
    @Test
    public void testInversionWithOne(){
       System.out.println("Test 10: Inversion with 1 at a random l");
       LongIntegerPolynomial polyA = LongIntegerPolynomial.ONE;
       int l = (int) Math.random()*9+1;
-      LongIntegerPolynomial result = polyA.inversion(6);
+	  LongInteger[] pList = {LongInteger.ONE, LongInteger.ZERO, LongInteger.ONE};
+	  LongIntegerPolynomial p = new LongIntegerPolynomial(pList);
+      LongIntegerPolynomial result = polyA.inversion(p, 1, LongIntegerPolynomial.ONE);
       boolean testPassed = result.equals(LongIntegerPolynomial.ONE);
       assertEquals(testPassed, true);
    }
@@ -94,7 +100,6 @@ public class Project4InversionTests {
    public void testInversionPolynomialNegCoeff(){
       System.out.println("Test 11: inversion with all negative coefficients");
       ArrayList<LongInteger> intList = new ArrayList<LongInteger>();
-      intList.add(LongInteger.valueOf(1));
       for(int i = 0; i < 6; i++){
          if(i == 3){
             intList.add(LongInteger.ZERO);
@@ -104,16 +109,19 @@ public class Project4InversionTests {
             intList.add(temp.negate());
          }
       }
+	  LongInteger[] pList = {LongInteger.ONE, LongInteger.ZERO, LongInteger.ONE};
+	  LongIntegerPolynomial p = new LongIntegerPolynomial(pList);
+	  
       LongIntegerPolynomial polyA = new LongIntegerPolynomial(intList);
-      LongIntegerPolynomial result = polyA.inversion(5);
-
-      LongIntegerPolynomial expectedResult = polyA.pow(LongInteger.valueOf(-1));
-
-      ArrayList<LongInteger> modList = (ArrayList<LongInteger>)Collections.nCopies(5, LongInteger.ZERO);
+      LongIntegerPolynomial result = polyA.inversion(p, 5, polyA);
+	  
+	  ArrayList<LongInteger> modList = new ArrayList<LongInteger>(Collections.nCopies(5, LongInteger.ZERO));
       modList.add(LongInteger.ONE);
-      LongIntegerPolynomial.changeModulus(new LongIntegerPolynomial(modList));
-
-      boolean testPassed = result.equals(expectedResult);
+      LongIntegerPolynomial.changeModulus(new LongIntegerPolynomial(p.pow(LongInteger.valueOf(5))));
+	  //Check: f*f^-1 = 1 mod x^l
+	  LongIntegerPolynomial check = result.multiply(polyA);
+	  //System.out.println("check: " + check);
+      boolean testPassed = check.equals(LongIntegerPolynomial.ONE);
       assertEquals(testPassed, true);
       LongIntegerPolynomial.changeModulus(LongIntegerPolynomial.ZERO);
       LongInteger.changeModulus(LongInteger.ZERO);
@@ -122,7 +130,6 @@ public class Project4InversionTests {
    public void testInversionWithPositivePolynomial(){
       System.out.println("Test 12: Inverting a random positive coefficient polynomnial");
       ArrayList<LongInteger> intList = new ArrayList<LongInteger>();
-      intList.add(LongInteger.valueOf(1));
       for(int i = 0; i < 6; i++){
          if(i == 3){
             intList.add(LongInteger.ZERO);
@@ -132,16 +139,19 @@ public class Project4InversionTests {
             intList.add(temp);
          }
       }
+	  LongInteger[] pList = {LongInteger.ONE, LongInteger.ZERO, LongInteger.ONE};
+	  LongIntegerPolynomial p = new LongIntegerPolynomial(pList);
+	  
       LongIntegerPolynomial polyA = new LongIntegerPolynomial(intList);
-      LongIntegerPolynomial result = polyA.inversion(5);
-
-      LongIntegerPolynomial expectedResult = polyA.pow(LongInteger.valueOf(-1));
-
-      ArrayList<LongInteger> modList = (ArrayList<LongInteger>)Collections.nCopies(5, LongInteger.ZERO);
+      LongIntegerPolynomial result = polyA.inversion(p, 5, polyA);
+	  
+	  ArrayList<LongInteger> modList = new ArrayList<LongInteger>(Collections.nCopies(5, LongInteger.ZERO));
       modList.add(LongInteger.ONE);
-      LongIntegerPolynomial.changeModulus(new LongIntegerPolynomial(modList));
-
-      boolean testPassed = result.equals(expectedResult);
+      LongIntegerPolynomial.changeModulus(new LongIntegerPolynomial(p.pow(LongInteger.valueOf(5))));
+	  //Check: f*f^-1 = 1 mod x^l
+	  LongIntegerPolynomial check = result.multiply(polyA);
+	  //System.out.println("check: " + check);
+      boolean testPassed = check.equals(LongIntegerPolynomial.ONE);
       assertEquals(testPassed, true);
       LongIntegerPolynomial.changeModulus(LongIntegerPolynomial.ZERO);
       LongInteger.changeModulus(LongInteger.ZERO);
