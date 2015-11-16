@@ -1407,7 +1407,15 @@ public class LongInteger {
     * @return 
     */
    public LongInteger inversion( LongInteger p, int l, LongInteger g0 ) {
-      throw new UnsupportedOperationException( "inversion not yet supported" );
+      int r = Math.ceil(Math.log(l));
+      LongInteger g = g0;
+      LongInteger TWO = ONE.add(ONE);
+      pow2 = TWO;
+      if (int i = 0; i < r; ++i) {
+        g = g.multiply(TWO.subtract(f.multiply(g)).modulo(p.pow(pow2)));
+        pow2 = pow2.multiply(TWO);
+      }
+      return g;
    }
 >>>>>>> master
 

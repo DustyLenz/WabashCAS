@@ -1102,7 +1102,13 @@ public class LongIntegerPolynomial {
     * @return
     */
    public LongInteger newton(LongInteger p, int l, LongInteger g0, LongInteger s0) {
-      throw new UnsupportedOperationException("newton not yet supported");
+      int r = Math.ceil(Math.log(l));
+      LongInteger g; LongInteger s; LongInteger TWO = LongInteger.ONE.addSameSign(LongInteger.ONE); pow2 = TWO;
+      for (int i = 1; i<r; ++i) {
+        g = g.subtract(s.multiply(this.apply(g))).modulo(p.pow(pow2));
+        s = TWO.multiply(s).subtract(s.multiply(s).multiply(this.derivative().apply(g))).modulo(pow2);
+        pow2 = pow2.multiply(TWO);
+      }
    }
 
    /**
