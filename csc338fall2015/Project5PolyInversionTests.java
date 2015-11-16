@@ -99,24 +99,31 @@ public class Project5PolyInversionTests {
    @Test
    public void testInversionPolynomialNegCoeff(){
       System.out.println("Test 11: inversion with all negative coefficients");
+	  LongInteger.changeModulus(LongInteger.valueOf(17));
       ArrayList<LongInteger> intList = new ArrayList<LongInteger>();
-      for(int i = 0; i < 6; i++){
-         if(i == 3){
-            intList.add(LongInteger.ZERO);
-         }
-         else{
-            LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
-            intList.add(temp.negate());
-         }
-      }
+      
+	  intList.add(LongInteger.valueOf(-187));
+	  intList.add(LongInteger.valueOf(-2));
+	  intList.add(LongInteger.valueOf(-5));
+	  intList.add(LongInteger.valueOf(-34));
+	  intList.add(LongInteger.valueOf(0));
+	  intList.add(LongInteger.valueOf(-125));
+	  
+	  
 	  LongInteger[] pList = {LongInteger.ONE, LongInteger.ZERO, LongInteger.ONE};
 	  LongIntegerPolynomial p = new LongIntegerPolynomial(pList);
-	  
+	 
       LongIntegerPolynomial polyA = new LongIntegerPolynomial(intList);
-      LongIntegerPolynomial result = polyA.inversion(p, 5, polyA);
 	  
-	  ArrayList<LongInteger> modList = new ArrayList<LongInteger>(Collections.nCopies(5, LongInteger.ZERO));
-      modList.add(LongInteger.ONE);
+	  LongInteger[] g0List = {LongInteger.valueOf(14), LongInteger.valueOf(2)};
+	  LongIntegerPolynomial g0 = new LongIntegerPolynomial(g0List);
+	  
+      LongIntegerPolynomial result = polyA.inversion(p, 5, g0);
+	  //System.out.println("p: " + p);
+	  //System.out.println("polyA: " + polyA);
+	  //System.out.println("result: " + result);
+	  
+	  
       LongIntegerPolynomial.changeModulus(new LongIntegerPolynomial(p.pow(LongInteger.valueOf(5))));
 	  //Check: f*f^-1 = 1 mod x^l
 	  LongIntegerPolynomial check = result.multiply(polyA);
@@ -129,24 +136,43 @@ public class Project5PolyInversionTests {
    @Test
    public void testInversionWithPositivePolynomial(){
       System.out.println("Test 12: Inverting a random positive coefficient polynomnial");
+	  LongInteger.changeModulus(LongInteger.valueOf(17));
       ArrayList<LongInteger> intList = new ArrayList<LongInteger>();
-      for(int i = 0; i < 6; i++){
-         if(i == 3){
-            intList.add(LongInteger.ZERO);
-         }
-         else{
-            LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(2));
-            intList.add(temp);
-         }
-      }
+      
+	  //Testing x^19 polynomial cause I hate myself
+	  //Coefficients generated from random.org
+	  intList.add(LongInteger.valueOf(23));
+	  intList.add(LongInteger.valueOf(17));
+	  intList.add(LongInteger.valueOf(40));
+	  intList.add(LongInteger.valueOf(0));
+	  intList.add(LongInteger.valueOf(79));
+	  intList.add(LongInteger.valueOf(46));
+	  intList.add(LongInteger.valueOf(10));
+	  intList.add(LongInteger.valueOf(14));
+	  intList.add(LongInteger.valueOf(86));
+	  intList.add(LongInteger.valueOf(57));
+	  intList.add(LongInteger.valueOf(35));
+	  intList.add(LongInteger.valueOf(61));
+	  intList.add(LongInteger.valueOf(37));
+	  intList.add(LongInteger.valueOf(56));
+	  intList.add(LongInteger.valueOf(19));
+	  intList.add(LongInteger.valueOf(27));
+	  intList.add(LongInteger.valueOf(32));
+	  intList.add(LongInteger.valueOf(0));
+	  intList.add(LongInteger.valueOf(34));
+	  intList.add(LongInteger.valueOf(16));
+	  intList.add(LongInteger.valueOf(38));
+	  
 	  LongInteger[] pList = {LongInteger.ONE, LongInteger.ZERO, LongInteger.ONE};
 	  LongIntegerPolynomial p = new LongIntegerPolynomial(pList);
 	  
       LongIntegerPolynomial polyA = new LongIntegerPolynomial(intList);
-      LongIntegerPolynomial result = polyA.inversion(p, 5, polyA);
 	  
-	  ArrayList<LongInteger> modList = new ArrayList<LongInteger>(Collections.nCopies(5, LongInteger.ZERO));
-      modList.add(LongInteger.ONE);
+	  LongInteger[] g0List = {LongInteger.valueOf(10), LongInteger.valueOf(8)};
+	  LongIntegerPolynomial g0 = new LongIntegerPolynomial(g0List);
+	  
+      LongIntegerPolynomial result = polyA.inversion(p, 7, g0);
+	  
       LongIntegerPolynomial.changeModulus(new LongIntegerPolynomial(p.pow(LongInteger.valueOf(5))));
 	  //Check: f*f^-1 = 1 mod x^l
 	  LongIntegerPolynomial check = result.multiply(polyA);

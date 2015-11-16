@@ -76,13 +76,20 @@ public class Project5IntegerInversionTests {
    }
    @Test
    public void testInversionNegativeInt(){
-	   System.out.println("Test 7: Inversion with positive integer");
-	   LongInteger intA = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(5));
-	   intA = intA.negate();
+	   System.out.println("Test 7: Inversion with negative integer");
+	   LongInteger temp = LongInteger.valueOf("-" + CSC338Utils.generateNDigitNumber(5));
+	   
+	   //Force number to have g0 = 1	   
+	   LongInteger intA = (temp.multiply(LongInteger.valueOf(3))).add(LongInteger.ONE);
+	   
+	   
 	   LongInteger p = LongInteger.valueOf(3);
 	   int l = 15;
 	   //3^15 = 14348907, a 8 digit number
-	   LongInteger g0 = intA.remainder(p);
+
+	   LongInteger g0 = LongInteger.ONE;
+	   //System.out.println("intA: " + intA);
+	   
 	   LongInteger returnValue = intA.inversion(p, l, g0);
 	   LongInteger.changeModulus(p.pow(LongInteger.valueOf(l)));
 	   LongInteger result = returnValue.multiply(intA);
@@ -93,11 +100,16 @@ public class Project5IntegerInversionTests {
    @Test
    public void testInversionPositiveInt(){
 	   System.out.println("Test 7: Inversion with positive integer");
-	   LongInteger intA = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(5));
+	   LongInteger temp = LongInteger.valueOf(CSC338Utils.generateNDigitNumber(5));
+	   
+	   //Force number so that g0 = 2
+	   
+	   LongInteger intA = (temp.multiply(LongInteger.valueOf(3))).add(LongInteger.valueOf(2));
+	   
 	   LongInteger p = LongInteger.valueOf(3);
 	   int l = 15;
 	   //3^15 = 14348907, a 8 digit number
-	   LongInteger g0 = intA.remainder(p);
+	   LongInteger g0 = LongInteger.valueOf(2);
 	   LongInteger returnValue = intA.inversion(p, l, g0);
 	   LongInteger.changeModulus(p.pow(LongInteger.valueOf(l)));
 	   LongInteger result = returnValue.multiply(intA);

@@ -1278,8 +1278,29 @@ public class LongInteger {
     * @param g0 the inverse of this modulo p
     * @return 
     */
+	//Author: Ngoc + Raymond, Edited by Albert
    public LongInteger inversion( LongInteger p, int l, LongInteger g0 ) {
-      throw new UnsupportedOperationException( "inversion not yet supported" );
+      if(this.equals(LongInteger.ZERO)){
+         throw new ParserException("Cannot invert zero");
+      }   
+
+      if(l <= 0){
+         throw new ParserException("Error: l cannot be <= 0");
+      }
+      //not sure of where the p goes unless that is the phi that i defined. then we just take that out, get the derivative and use it in equations.
+      //LongIntegerPolynomial phig = Value(0).modular(p.pow(LongInteger.valueOf(2)));
+      LongInteger g = g0;
+      LongInteger f = new LongInteger(this);
+
+      int r = (int) Math.ceil((Math.log(l)/Math.log(2)));
+      for(int i = 1; i <= r; i++) {
+         g = g.multiply(LongInteger.valueOf(2)).subtract(f.multiply(g.pow(LongInteger.valueOf(2))));
+         int modPow = (int) Math.pow(2,i);
+         LongInteger.changeModulus(p.pow(LongInteger.valueOf(modPow)));
+         g = g.add(LongInteger.ZERO);
+         LongInteger.changeModulus(LongInteger.ZERO);
+      }
+      return g;
    }
 
 }

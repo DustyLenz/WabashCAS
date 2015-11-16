@@ -49,7 +49,7 @@ public class Project5PolyDeriveTests {
    }
    @Test
    public void testDerivativeOfOne(){
-	   System.out.println("Test: Derivative of 0");
+	   System.out.println("Test: Derivative of 1");
 	   LongIntegerPolynomial polyA = LongIntegerPolynomial.ONE;
 	   LongIntegerPolynomial result = polyA.derivative();
 	   boolean testPassed = result.equals(LongIntegerPolynomial.ZERO);
@@ -57,6 +57,7 @@ public class Project5PolyDeriveTests {
    }
    @Test 
    public void testDerivativesNegCoeff(){
+      System.out.println("Test: Derivative of Function with negative coefficients");
 	  ArrayList<LongInteger> intList = new ArrayList<LongInteger>();
       intList.add(LongInteger.valueOf(1));
       for(int i = 0; i < 15; i++){
@@ -71,10 +72,14 @@ public class Project5PolyDeriveTests {
 	  ArrayList<LongInteger> intListCopy = new ArrayList<LongInteger>(intList);
 	  LongIntegerPolynomial polyA = new LongIntegerPolynomial(intList);
 	  LongIntegerPolynomial result = polyA.derivative();
-	  
+	  //System.out.println("PolyA: " + polyA);
+	  //System.out.println("result: " + result);
 	  ArrayList<LongInteger> checkList = new ArrayList<LongInteger>(result.coefficients());
+	  //System.out.println("Checklist size: " + checkList.size());
+	  //System.out.println("IntList size: " + intListCopy.size());
 	  boolean allPassed = true;
 	  for(int i = 1; i < intListCopy.size(); i++){
+	  //System.out.println("i: " + i);
 		  LongInteger temp = intListCopy.get(i).multiply(LongInteger.valueOf(i));
 		  if(!temp.equals(checkList.get(i-1))){
 			  allPassed = false;
@@ -85,7 +90,8 @@ public class Project5PolyDeriveTests {
    }
    @Test
    public void testDerivativePosCoeff(){
-	   ArrayList<LongInteger> intList = new ArrayList<LongInteger>();
+      System.out.println("Test: Derivative of Function with positive coefficients");
+	  ArrayList<LongInteger> intList = new ArrayList<LongInteger>();
       intList.add(LongInteger.valueOf(1));
       for(int i = 0; i < 15; i++){
          if(i == 3 || i == 7){

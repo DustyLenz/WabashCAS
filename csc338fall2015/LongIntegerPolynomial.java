@@ -381,7 +381,7 @@ public class LongIntegerPolynomial {
       if (!LongIntegerPolynomial.modular()) {
          return this.divideAndRemainder(poly)[0];
       } else {
-		 //System.out.println("divideMod");
+         //System.out.println("divideMod");
          return this.divideMod(poly);
       }
    }
@@ -531,11 +531,11 @@ public class LongIntegerPolynomial {
          if (this.degree() == 0) {
             return LongIntegerPolynomial.valueOf(this.coeffs.get(0).inverse());
          } else {
-			//System.out.println("Error in inverse");
+            //System.out.println("Error in inverse");
             throw new ParserException("Integer polynomial " + this.toString() + " is not a unit");
          }
       } else { // Modular arithmetic
-		 //System.out.println("Modular arith");
+         //System.out.println("Modular arith");
          return LongIntegerPolynomial.ONE.divide(this);
       }
    }
@@ -908,16 +908,16 @@ public class LongIntegerPolynomial {
     * @return
     */
    public LongIntegerPolynomial inversion(int l) {
-	  if(this.equals(LongIntegerPolynomial.ZERO)){
-		throw new ParserException("Cannot invert Zero Polynomial");
-	  }
-	  
-	  if(this.equals(LongIntegerPolynomial.ONE)){
-		return LongIntegerPolynomial.ONE;
-	  }
-	  
-	  LongInteger firstCoeff = this.coefficients().get(0);
-	  //System.out.println("First Coefficient: " + firstCoeff);
+      if(this.equals(LongIntegerPolynomial.ZERO)){
+         throw new ParserException("Cannot invert Zero Polynomial");
+      }
+
+      if(this.equals(LongIntegerPolynomial.ONE)){
+         return LongIntegerPolynomial.ONE;
+      }
+
+      LongInteger firstCoeff = this.coefficients().get(0);
+      //System.out.println("First Coefficient: " + firstCoeff);
       if(!firstCoeff.equals(LongInteger.ONE)){
          throw new ParserException("Constant term is not 1");
       }
@@ -925,7 +925,7 @@ public class LongIntegerPolynomial {
          throw new ParserException("Error: l cannot be <= 0");
       }
       LongIntegerPolynomial g = LongIntegerPolynomial.ONE;
-	  LongIntegerPolynomial f = new LongIntegerPolynomial(this);
+      LongIntegerPolynomial f = new LongIntegerPolynomial(this);
       int r = (int) Math.ceil((Math.log(l)/Math.log(2)));
       for(int i = 1; i <= r; i++){
          g = g.multiply(LongInteger.valueOf(2)).subtract(f.multiply(g.pow(LongInteger.valueOf(2))));
@@ -943,39 +943,39 @@ public class LongIntegerPolynomial {
     */
    public LongIntegerPolynomial[] fastDivideAndRemainder(LongIntegerPolynomial poly) {
       LongIntegerPolynomial[] result = new LongIntegerPolynomial[2];
-	  result[0] = LongIntegerPolynomial.ZERO;
-	  result[1] = new LongIntegerPolynomial(this);
-	  
-	  LongIntegerPolynomial thisCopy = new LongIntegerPolynomial(this);
-	  
+      result[0] = LongIntegerPolynomial.ZERO;
+      result[1] = new LongIntegerPolynomial(this);
+
+      LongIntegerPolynomial thisCopy = new LongIntegerPolynomial(this);
+
       int deg_a = this.degree();  
-	  int deg_b = poly.degree();
+      int deg_b = poly.degree();
       if (deg_a < deg_b){
-		return result;
-	  }
+         return result;
+      }
       int m = deg_a - deg_b;
-	  //System.out.println("m: " + m);
-	  //System.out.println("Poly: " + poly);
-	  LongIntegerPolynomial rev_b = poly.reversal(deg_b);
-	  //System.out.println("rev_b: " + rev_b);
+      //System.out.println("m: " + m);
+      //System.out.println("Poly: " + poly);
+      LongIntegerPolynomial rev_b = poly.reversal(deg_b);
+      //System.out.println("rev_b: " + rev_b);
       LongIntegerPolynomial rev_b_inv = rev_b.inversion(m+1);
-	  
-	  LongIntegerPolynomial q_ = (thisCopy.reversal(deg_a)).karatsuba(rev_b_inv);
-	  //System.out.println("q*: " + temp);
-	  //Take modulus
-	  ArrayList<LongInteger> modList = new ArrayList<LongInteger>(Collections.nCopies(m+1, LongInteger.ZERO));
+
+      LongIntegerPolynomial q_ = (thisCopy.reversal(deg_a)).karatsuba(rev_b_inv);
+      //System.out.println("q*: " + temp);
+      //Take modulus
+      ArrayList<LongInteger> modList = new ArrayList<LongInteger>(Collections.nCopies(m+1, LongInteger.ZERO));
       modList.add(LongInteger.ONE);
       LongIntegerPolynomial.changeModulus(new LongIntegerPolynomial(modList));
-	  
-	  q_ = q_.add(LongIntegerPolynomial.ZERO);
-	  
-	  LongIntegerPolynomial.changeModulus(LongIntegerPolynomial.ZERO);
-	  
+
+      q_ = q_.add(LongIntegerPolynomial.ZERO);
+
+      LongIntegerPolynomial.changeModulus(LongIntegerPolynomial.ZERO);
+
       LongIntegerPolynomial q = q_.reversal(m);
       LongIntegerPolynomial r = this.subtract(poly.karatsuba(q));
-	  
-	  result[0] = new LongIntegerPolynomial(q);
-	  result[1] = new LongIntegerPolynomial(r);
+
+      result[0] = new LongIntegerPolynomial(q);
+      result[1] = new LongIntegerPolynomial(r);
       return result;
    }
 
@@ -988,8 +988,30 @@ public class LongIntegerPolynomial {
     * @param g0 the inverse of this modulo p
     * @return
     */
+	//Author: Ashton
    public LongIntegerPolynomial inversion(LongIntegerPolynomial p, int l, LongIntegerPolynomial g0) {
-      throw new UnsupportedOperationException("inversion not yet supported");
+
+      if(this.equals(LongIntegerPolynomial.ZERO)){
+         throw new ParserException("Cannot invert Zero Polynomial");
+      }   
+
+      if(l <= 0){
+         throw new ParserException("Error: l cannot be <= 0");
+      }
+      //not sure of where the p goes unless that is the phi that i defined. then we just take that out, get the derivative and use it in equations.
+      //LongIntegerPolynomial phig = Value(0).modular(p.pow(LongInteger.valueOf(2)));
+      LongIntegerPolynomial g = g0;
+      LongIntegerPolynomial f = new LongIntegerPolynomial(this);
+
+      int r = (int) Math.ceil((Math.log(l)/Math.log(2)));
+      for(int i = 1; i <= r; i++) {
+         g = g.multiply(LongInteger.valueOf(2)).subtract(f.multiply(g.pow(LongInteger.valueOf(2))));
+         int modPow = (int) Math.pow(2,i);
+         LongIntegerPolynomial.changeModulus(p.pow(LongInteger.valueOf(modPow)));
+         g = g.add(LongIntegerPolynomial.ZERO);
+         LongIntegerPolynomial.changeModulus(LongIntegerPolynomial.ZERO);
+      }
+      return g;
    }
 
    /**
@@ -997,8 +1019,21 @@ public class LongIntegerPolynomial {
     *
     * @return
     */
+	//Author: Korbin
    public LongIntegerPolynomial derivative() {
-      throw new UnsupportedOperationException("derivative not yet supported");
+      if( this.degree()==0) {
+      return LongIntegerPolynomial.ZERO; 
+     }
+
+     int size=this.degree()+1;
+     ArrayList<LongInteger> inputList = new ArrayList<LongInteger>();
+     inputList.addAll(this.coeffs);
+     ArrayList<LongInteger> derivList = new ArrayList<LongInteger>();
+     for(int i=1;i<size; i++){
+       derivList.add((inputList.get(i)).multiply(LongInteger.valueOf(i)));
+     }
+     LongIntegerPolynomial derivPoly = new LongIntegerPolynomial(derivList);
+     return derivPoly;
    }
 
    /**
@@ -1010,6 +1045,7 @@ public class LongIntegerPolynomial {
     * @param s0 the inverse of the derivative of this evaluated at g0 modulo p
     * @return
     */
+	//Author: Ngoc + Raymond
    public LongInteger newton(LongInteger p, int l, LongInteger g0, LongInteger s0) {
       throw new UnsupportedOperationException("newton not yet supported");
    }
